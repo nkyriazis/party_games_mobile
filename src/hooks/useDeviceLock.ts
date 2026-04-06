@@ -1,18 +1,23 @@
 import { useEffect, useRef } from 'react';
 import { GameState } from './useGame';
+import { Capacitor } from '@capacitor/core';
+import { StatusBar } from '@capacitor/status-bar';
+import { NavigationBar } from '@hugotomazi/capacitor-navigation-bar';
 
 /**
  * Hook to manage device persistence and prevent accidental navigation.
  * - Screen Wake Lock: Keeps the screen on during the game.
  * - Navigation Lock: Prevents accidental "back" button usage.
  * - Leave Confirmation: Warns before refreshing or closing the tab.
+ * - Immersive Mode: Hides status and navigation bars on mobile.
  */
 export const useDeviceLock = (gameState: GameState) => {
   const wakeLockRef = useRef<any>(null);
 
-  // 1. Screen Wake Lock Management
+  // 1. Immersive Mode & Screen Wake Lock Management
   useEffect(() => {
     const requestWakeLock = async () => {
+      // Screen Wake Lock
       if ('wakeLock' in navigator && !wakeLockRef.current) {
         try {
           // @ts-ignore - Screen Wake Lock API might not be in all TS versions
@@ -25,6 +30,16 @@ export const useDeviceLock = (gameState: GameState) => {
           console.error(`Wake Lock error: ${err.name}, ${err.message}`);
         }
       }
+
+      // Capacitor Immersive Mode
+      if (Capacitor.isNativePlatform()) {
+        try {
+          await StatusBar.hide();
+          await NavigationBar.hide();
+        } catch (err) {
+          console.error('Failed to hide bars', err);
+        }
+      }
     };
 
     const releaseWakeLock = async () => {
@@ -32,9 +47,12 @@ export const useDeviceLock = (gameState: GameState) => {
         await wakeLockRef.current.release();
         wakeLockRef.current = null;
       }
+      
+      // We don't necessarily show the bars again when releasing wake lock 
+      // as we might want to stay in immersive mode, but for SETUP we might want them back.
     };
 
-    // Only lock screen when in a game state (READY, PLAYING, EXPLODED)
+    // Only lock screen and go immersive when in a game state (READY, PLAYING, EXPLODED)
     if (gameState !== GameState.SETUP) {
       requestWakeLock();
     } else {

@@ -5,6 +5,9 @@ import { usePlayers, Player } from './hooks/usePlayers';
 import { useDeviceLock } from './hooks/useDeviceLock';
 import { Bomb, UserPlus, X, Play, RotateCcw, Trophy, Users, Trash2, Maximize, Minimize } from 'lucide-react';
 import { soundManager } from './utils/soundManager';
+import { Capacitor } from '@capacitor/core';
+import { StatusBar } from '@capacitor/status-bar';
+import { NavigationBar } from '@hugotomazi/capacitor-navigation-bar';
 
 export default function App() {
   const {
@@ -26,6 +29,16 @@ export default function App() {
 
   // Persistence management (wake lock and back button prevention)
   useDeviceLock(gameState);
+
+  // Automatic fullscreen on native launch
+  useEffect(() => {
+    if (Capacitor.isNativePlatform()) {
+      StatusBar.setBackgroundColor({ color: '#020617' }); // Slate-950
+      StatusBar.hide();
+      NavigationBar.hide();
+      setIsFullscreen(true);
+    }
+  }, []);
   
   // Audio control loop
   const lastTickRef = useRef<number>(0);
@@ -51,19 +64,37 @@ export default function App() {
     }
   }, [gameState]);
 
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch((err) => {
-        console.error(`Error attempting to enable full-screen mode: ${err.message}`);
-      });
-      setIsFullscreen(true);
+  const toggleFullscreen = async () => {
+    if (Capacitor.isNativePlatform()) {
+      try {
+        if (!isFullscreen) {
+          await StatusBar.hide();
+          await NavigationBar.hide();
+          setIsFullscreen(true);
+        } else {
+          await StatusBar.show();
+          await NavigationBar.show();
+          setIsFullscreen(false);
+        }
+      } catch (err) {
+        console.error('Fullscreen toggle error:', err);
+      }
     } else {
-      document.exitFullscreen();
-      setIsFullscreen(false);
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch((err) => {
+          console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+        });
+        setIsFullscreen(true);
+      } else {
+        document.exitFullscreen();
+        setIsFullscreen(false);
+      }
     }
   };
 
   useEffect(() => {
+    if (Capacitor.isNativePlatform()) return;
+    
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
     };
