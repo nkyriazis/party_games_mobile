@@ -10,7 +10,6 @@ export default function App() {
   const {
     timeLeft,
     isTicking,
-    isExploded,
     currentGram,
     currentDieMode,
     gameState,

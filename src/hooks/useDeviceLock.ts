@@ -65,7 +65,7 @@ export const useDeviceLock = (gameState: GameState) => {
       }
     }
 
-    const handlePopState = (event: PopStateEvent) => {
+    const handlePopState = () => {
       // If the user tries to go back while the game is active, stay on the page
       if (gameState !== GameState.SETUP) {
         window.history.pushState({ inGame: true }, '');

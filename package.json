@@ -10,7 +10,7 @@
     "test:watch": "vitest",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "android:build": "docker-compose up --build android-build"
+    "android:build": "docker compose up --build android-build"
   },
   "dependencies": {
     "react": "^18.2.0",

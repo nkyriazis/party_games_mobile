@@ -32,27 +32,13 @@ WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm install --include=optional && npm install @rollup/rollup-linux-x64-gnu
 
 # Copy the rest of the application
 COPY . .
 
-# Build the web application
-RUN npm run build
+# Ensure build script is executable
+RUN chmod +x scripts/build-android.sh
 
-# Ensure the android platform is added and synced
-# We use a script to handle the first-time initialization vs update
-RUN if [ ! -d "android" ]; then \
-        npx cap add android; \
-    fi && \
-    npx cap sync android
-
-# Build the APK
-WORKDIR /app/android
-RUN ./gradlew assembleDebug
-
-# Output directory for the APK
-RUN mkdir -p /app/build-output && \
-    cp app/build/outputs/apk/debug/app-debug.apk /app/build-output/tick-tack-boom.apk
-
-CMD ["echo", "Build completed. Check build-output/tick-tack-boom.apk"]
+# The build process is now handled by the script at runtime
+CMD ["./scripts/build-android.sh"]

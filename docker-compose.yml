@@ -27,5 +27,6 @@ services:
       context: .
       dockerfile: Dockerfile.android
     volumes:
+      - .:/app
+      - /app/node_modules
       - ./build-output:/app/build-output
-    command: ["sh", "-c", "cp /app/android/app/build/outputs/apk/debug/app-debug.apk /app/build-output/tick-tack-boom.apk && echo 'Done! APK is in build-output/tick-tack-boom.apk'"]
