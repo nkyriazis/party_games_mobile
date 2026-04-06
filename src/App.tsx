@@ -39,15 +39,15 @@ export default function App() {
       setIsFullscreen(true);
     }
   }, []);
-  
+
   // Audio control loop
   const lastTickRef = useRef<number>(0);
   useEffect(() => {
     if (isTicking && timeLeft !== null) {
       // Accelerate ticks as time runs out
-      const tickInterval = Math.max(0.1, (timeLeft / 90) * 1.0); 
+      const tickInterval = Math.max(0.1, (timeLeft / 90) * 1.0);
       const now = Date.now();
-      
+
       if (now - lastTickRef.current > tickInterval * 1000) {
         soundManager.playTick(440 + (90 - timeLeft) * 5);
         lastTickRef.current = now;
@@ -94,7 +94,7 @@ export default function App() {
 
   useEffect(() => {
     if (Capacitor.isNativePlatform()) return;
-    
+
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
     };
@@ -105,10 +105,10 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-950 text-white font-sans select-none overflow-hidden flex flex-col">
       <AnimatePresence mode="wait">
-        
+
         {/* SETUP SCREEN */}
         {gameState === GameState.SETUP && (
-          <motion.div 
+          <motion.div
             key="setup"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -116,7 +116,7 @@ export default function App() {
             className="flex-1 flex flex-col p-6 max-w-md mx-auto w-full"
           >
             <header className="py-8 text-center relative">
-              <button 
+              <button
                 onClick={toggleFullscreen}
                 className="absolute right-0 top-8 p-2 text-slate-500 hover:text-white transition-colors"
                 title="Fullscreen"
@@ -129,15 +129,15 @@ export default function App() {
 
             <div className="flex-1 space-y-4 overflow-y-auto pr-2">
               <div className="flex space-x-2">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={newPlayerName}
                   onChange={(e) => setNewPlayerName(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && (addPlayer(newPlayerName), setNewPlayerName(''))}
                   placeholder="Όνομα παίκτη..."
                   className="flex-1 bg-slate-900 border-2 border-slate-800 rounded-2xl px-4 py-3 focus:border-red-600 outline-none transition-all"
                 />
-                <button 
+                <button
                   onClick={() => { addPlayer(newPlayerName); setNewPlayerName(''); }}
                   className="bg-red-600 p-4 rounded-2xl active:scale-90 transition-transform"
                 >
@@ -147,7 +147,7 @@ export default function App() {
 
               <div className="grid grid-cols-1 gap-2">
                 {players.map(player => (
-                  <motion.div 
+                  <motion.div
                     layout="position"
                     key={player.id}
                     className="flex items-center justify-between bg-slate-900/50 p-4 rounded-2xl border border-slate-800"
@@ -166,7 +166,7 @@ export default function App() {
 
             <footer className="py-6 space-y-3">
               {players.length >= 2 ? (
-                <button 
+                <button
                   onClick={startGame}
                   className="w-full bg-white text-slate-950 font-black py-5 rounded-3xl text-xl flex items-center justify-center space-x-3 active:scale-95 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)]"
                 >
@@ -182,7 +182,7 @@ export default function App() {
 
         {/* READY SCREEN */}
         {gameState === GameState.READY && (
-          <motion.div 
+          <motion.div
             key="ready"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -190,13 +190,13 @@ export default function App() {
             className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-12"
           >
             <div className="relative">
-               <motion.div 
-                 animate={{ scale: [1, 1.05, 1], rotate: [0, 1, -1, 0] }}
-                 transition={{ repeat: Infinity, duration: 2 }}
-               >
-                 <Bomb size={180} className="text-slate-800" />
-               </motion.div>
-               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-600/10 blur-3xl w-40 h-40 rounded-full" />
+              <motion.div
+                animate={{ scale: [1, 1.05, 1], rotate: [0, 1, -1, 0] }}
+                transition={{ repeat: Infinity, duration: 2 }}
+              >
+                <Bomb size={180} className="text-slate-800" />
+              </motion.div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-600/10 blur-3xl w-40 h-40 rounded-full" />
             </div>
 
             <div className="space-y-4">
@@ -205,26 +205,26 @@ export default function App() {
             </div>
 
             <div className="w-full max-w-xs space-y-4">
-               <button 
+              <button
                 onClick={startRound}
                 className="w-full bg-red-600 text-white font-black py-6 rounded-3xl text-2xl shadow-[0_0_50px_rgba(220,38,38,0.3)] active:scale-95 transition-all"
-               >
+              >
                 ΕΚΚΙΝΗΣΗ
-               </button>
-               <button 
+              </button>
+              <button
                 onClick={backToSetup}
                 className="text-slate-500 font-bold hover:text-white transition-colors flex items-center justify-center space-x-2 w-full"
-               >
+              >
                 <Users size={16} />
                 <span>ΑΛΛΑΓΗ ΠΑΙΚΤΩΝ</span>
-               </button>
+              </button>
             </div>
           </motion.div>
         )}
 
         {/* PLAYING SCREEN */}
         {gameState === GameState.PLAYING && (
-          <motion.div 
+          <motion.div
             key="playing"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -235,19 +235,19 @@ export default function App() {
               {/* Animated Bomb Background */}
               <div className="relative mb-8">
                 <motion.div
-                  animate={{ 
+                  animate={{
                     scale: [1, 1.2, 1],
                     color: ['#1e293b', '#ef4444', '#1e293b']
                   }}
-                  transition={{ 
+                  transition={{
                     duration: Math.max(0.1, (timeLeft || 1) / 30),
-                    repeat: Infinity 
+                    repeat: Infinity
                   }}
                 >
                   <Bomb size={200} />
                 </motion.div>
                 {/* Heat glow */}
-                <motion.div 
+                <motion.div
                   className="absolute inset-0 bg-red-600 blur-[80px] rounded-full -z-10"
                   animate={{ opacity: [0.1, 0.4, 0.1] }}
                   transition={{ duration: 1, repeat: Infinity }}
@@ -280,13 +280,13 @@ export default function App() {
 
         {/* EXPLODED SCREEN */}
         {gameState === GameState.EXPLODED && (
-          <motion.div 
+          <motion.div
             key="exploded"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="flex-1 flex flex-col p-6 items-center"
           >
-            <motion.div 
+            <motion.div
               initial={{ scale: 0, rotate: -20 }}
               animate={{ scale: 1, rotate: 0 }}
               className="bg-red-600 text-white font-black text-6xl px-10 py-6 rounded-3xl shadow-[0_0_100px_rgba(220,38,38,0.6)] my-12 italic"
@@ -295,7 +295,7 @@ export default function App() {
             </motion.div>
 
             <h3 className="text-xl font-bold text-slate-400 mb-6 uppercase tracking-widest text-center">Ποιος είχε τη βόμβα;</h3>
-            
+
             <div className="flex-1 w-full grid grid-cols-2 gap-3 overflow-y-auto max-w-sm">
               {players.map(player => (
                 <button
@@ -312,7 +312,7 @@ export default function App() {
               ))}
             </div>
 
-            <button 
+            <button
               onClick={cancelRound}
               className="mt-6 text-slate-500 font-bold flex items-center space-x-2"
             >
@@ -343,7 +343,7 @@ function Scoreboard({ players, onReset }: { players: Player[], onReset: () => vo
 
   return (
     <>
-      <button 
+      <button
         onClick={() => setIsOpen(true)}
         className="fixed bottom-6 right-6 bg-slate-800 p-4 rounded-full shadow-2xl border border-slate-700 active:scale-90 transition-all z-40"
       >
@@ -352,7 +352,7 @@ function Scoreboard({ players, onReset }: { players: Player[], onReset: () => vo
 
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -378,8 +378,8 @@ function Scoreboard({ players, onReset }: { players: Player[], onReset: () => vo
               ))}
             </div>
 
-            <button 
-              onClick={() => { if(confirm('Είστε σίγουροι;')) { onReset(); setIsOpen(false); }}}
+            <button
+              onClick={() => { if (confirm('Είστε σίγουροι;')) { onReset(); setIsOpen(false); } }}
               className="mt-8 flex items-center justify-center space-x-2 text-slate-600 font-bold hover:text-red-500 transition-colors"
             >
               <Trash2 size={16} />

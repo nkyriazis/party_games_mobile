@@ -10,7 +10,8 @@
     "test:watch": "vitest",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "android:build": "docker compose up --build android-build"
+    "android:build": "npm run assets:android && docker compose up --build android-build",
+    "assets:android": "capacitor-assets generate --android --assetPath resources --iconBackgroundColor '#0f172a' --iconBackgroundColorDark '#0f172a'"
   },
   "dependencies": {
     "@capacitor/android": "^6.0.0",
@@ -29,6 +30,7 @@
     "xstate": "^5.19.2"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^6.0.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",

@@ -4,13 +4,18 @@ set -e
 echo "Installing dependencies..."
 npm install --include=optional && npm install @rollup/rollup-linux-x64-gnu
 
+if [ ! -d "android" ]; then
+    echo "Adding Capacitor Android project..."
+    npx cap add android
+fi
+
+echo "Generating Android launcher icons..."
+npm run assets:android
+
 echo "Building web application..."
 npm run build
 
 echo "Syncing Capacitor..."
-if [ ! -d "android" ]; then
-    npx cap add android
-fi
 npx cap sync android
 
 echo "Building Android APK..."
