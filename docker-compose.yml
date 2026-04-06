@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true # Better watch performance in some Docker setups
+    stdin_open: true
+    tty: true
+
+  production:
+    build:
+      context: .
+      target: production
+    ports:
+      - "8080:80"

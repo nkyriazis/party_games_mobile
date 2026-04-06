@@ -1,0 +1,9 @@
+node_modules
+dist
+.git
+.DS_Store
+*.md
+Dockerfile
+docker-compose.yml
+public/greek_utf8.txt
+public/greek_clean.txt
