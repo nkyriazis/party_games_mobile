@@ -5,6 +5,7 @@ import { UserConfig } from 'vitest/config'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: './',
   plugins: [
     react(),
     VitePWA({

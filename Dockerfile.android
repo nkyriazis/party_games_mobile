@@ -1,0 +1,58 @@
+# Use Node.js 20 as base for web builds
+FROM node:20-bookworm-slim AS builder
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    openjdk-17-jdk \
+    wget \
+    unzip \
+    git \
+    python3 \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set up Android SDK environment
+ENV ANDROID_HOME /opt/android-sdk
+ENV PATH ${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/34.0.0
+
+# Download and install Android Command Line Tools
+RUN mkdir -p ${ANDROID_HOME}/cmdline-tools && \
+    wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/cmdline-tools.zip && \
+    unzip -q /tmp/cmdline-tools.zip -d /tmp/cmdline-tools && \
+    mv /tmp/cmdline-tools/cmdline-tools ${ANDROID_HOME}/cmdline-tools/latest && \
+    rm /tmp/cmdline-tools.zip
+
+# Accept Android Licenses
+RUN yes | sdkmanager --licenses
+
+# Install Android SDK components
+RUN sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
+
+WORKDIR /app
+
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy the rest of the application
+COPY . .
+
+# Build the web application
+RUN npm run build
+
+# Ensure the android platform is added and synced
+# We use a script to handle the first-time initialization vs update
+RUN if [ ! -d "android" ]; then \
+        npx cap add android; \
+    fi && \
+    npx cap sync android
+
+# Build the APK
+WORKDIR /app/android
+RUN ./gradlew assembleDebug
+
+# Output directory for the APK
+RUN mkdir -p /app/build-output && \
+    cp app/build/outputs/apk/debug/app-debug.apk /app/build-output/tick-tack-boom.apk
+
+CMD ["echo", "Build completed. Check build-output/tick-tack-boom.apk"]
