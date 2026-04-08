@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
+    "grams:generate": "node scripts/generate-grams.mjs",
+    "prebuild": "npm run grams:generate",
     "build": "tsc && vite build",
     "test": "vitest run",
     "test:watch": "vitest",

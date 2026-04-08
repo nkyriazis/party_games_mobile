@@ -29,7 +29,7 @@ The project follows a modular, hooks-centric architecture:
   - `usePlayers.ts`: Handles player management, scoring, and persistence via `localStorage`.
   - `useDictionary.ts`: Loads and provides validation for the Greek wordlist.
 - **`src/utils/soundManager.ts`**: Encapsulates audio logic using the Web Audio API to avoid external asset dependencies for core sounds.
-- **`src/data/grams.json`**: A collection of common Greek syllables used as game prompts.
+- **`src/data/grams.json`**: An auto-generated collection of Greek 2-grams and 3-grams derived from the word list and used as game prompts.
 - **`public/greek_wordlist.txt`**: A comprehensive list of Greek words for potential future automated validation.
 
 ## Building and Running
