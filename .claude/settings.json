@@ -1,0 +1,7 @@
+{
+  "includeGitInstructions": false,
+  "env": {
+    "CLAUDE_CODE_ATTRIBUTION_HEADER": "0",
+    "DISABLE_TELEMETRY": "1"
+  }
+}

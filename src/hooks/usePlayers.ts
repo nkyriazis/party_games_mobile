@@ -49,11 +49,15 @@ export const usePlayers = () => {
     setPlayers(prev => prev.filter(p => p.id !== id));
   }, []);
 
-  const incrementScore = useCallback((id: string) => {
-    setPlayers(prev => prev.map(p => 
-      p.id === id ? { ...p, score: p.score + 1 } : p
+  const updateScore = useCallback((id: string, delta: number) => {
+    setPlayers(prev => prev.map(p =>
+      p.id === id ? { ...p, score: p.score + delta } : p
     ));
   }, []);
+
+  const incrementScore = useCallback((id: string) => {
+    updateScore(id, 1);
+  }, [updateScore]);
 
   const resetScores = useCallback(() => {
     setPlayers(prev => prev.map(p => ({ ...p, score: 0 })));

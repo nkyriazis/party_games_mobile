@@ -1,68 +1,36 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useGame, GameState, DieMode } from './hooks/useGame';
 import { usePlayers, Player } from './hooks/usePlayers';
-import { useDeviceLock } from './hooks/useDeviceLock';
-import { Bomb, UserPlus, X, Play, RotateCcw, Trophy, Users, Trash2, Maximize, Minimize } from 'lucide-react';
-import { soundManager } from './utils/soundManager';
+import { useTeams, Team } from './hooks/useTeams';
+import {
+  X, Trophy, Users, Trash2, Maximize, Minimize,
+  Gamepad2, Bomb, MessageSquare, ArrowLeft
+} from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 import { StatusBar } from '@capacitor/status-bar';
 import { NavigationBar } from '@hugotomazi/capacitor-navigation-bar';
 
+import { TickTackBoomGame } from './components/TickTackBoomGame';
+import { TabooGame } from './components/TabooGame';
+import { SetupPage } from './components/SetupPage';
+
+type GameId = 'setup' | 'hub' | 'tick-tack-boom' | 'taboo';
+
 export default function App() {
-  const {
-    timeLeft,
-    isTicking,
-    currentGram,
-    currentDieMode,
-    gameState,
-    startGame,
-    startRound,
-    confirmExplosion,
-    cancelRound,
-    backToSetup
-  } = useGame();
-
+  const [currentGame, setCurrentGame] = useState<GameId>('setup');
   const { players, addPlayer, removePlayer, incrementScore, resetScores } = usePlayers();
-  const [newPlayerName, setNewPlayerName] = useState('');
+  const { teams, addTeam, removeTeam, addPlayerToTeam, removePlayerFromTeam, updateTeamScore, getTeamForPlayer, getNextUpPlayer, resetScores: resetTeamScores } = useTeams(players);
   const [isFullscreen, setIsFullscreen] = useState(false);
-
-  // Persistence management (wake lock and back button prevention)
-  useDeviceLock(gameState);
 
   // Automatic fullscreen on native launch
   useEffect(() => {
     if (Capacitor.isNativePlatform()) {
-      StatusBar.setBackgroundColor({ color: '#020617' }); // Slate-950
+      StatusBar.setBackgroundColor({ color: '#020617' });
       StatusBar.hide();
       NavigationBar.hide();
       setIsFullscreen(true);
     }
   }, []);
-
-  // Audio control loop
-  const lastTickRef = useRef<number>(0);
-  useEffect(() => {
-    if (isTicking && timeLeft !== null) {
-      // Accelerate ticks as time runs out
-      const tickInterval = Math.max(0.1, (timeLeft / 90) * 1.0);
-      const now = Date.now();
-
-      if (now - lastTickRef.current > tickInterval * 1000) {
-        soundManager.playTick(440 + (90 - timeLeft) * 5);
-        lastTickRef.current = now;
-      }
-    }
-  }, [isTicking, timeLeft]);
-
-  useEffect(() => {
-    if (gameState === GameState.EXPLODED) {
-      soundManager.playExplosion();
-      if ('vibrate' in navigator) {
-        navigator.vibrate([200, 100, 200, 100, 500]);
-      }
-    }
-  }, [gameState]);
 
   const toggleFullscreen = async () => {
     if (Capacitor.isNativePlatform()) {
@@ -94,22 +62,33 @@ export default function App() {
 
   useEffect(() => {
     if (Capacitor.isNativePlatform()) return;
-
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
+    const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
+  // Check if setup is complete
+  const isSetupComplete = players.length >= 2 && teams.length >= 2 && players.every(p => teams.some(t => t.playerIds.includes(p.id)));
+
   return (
     <div className="min-h-screen bg-slate-950 text-white font-sans select-none overflow-hidden flex flex-col">
       <AnimatePresence mode="wait">
-
-        {/* SETUP SCREEN */}
-        {gameState === GameState.SETUP && (
+        {currentGame === 'setup' && (
           <motion.div
             key="setup"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+          >
+            <SetupPage
+              onComplete={() => setCurrentGame('hub')}
+            />
+          </motion.div>
+        )}
+
+        {currentGame === 'hub' && (
+          <motion.div
+            key="hub"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -123,210 +102,131 @@ export default function App() {
               >
                 {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
               </button>
-              <h1 className="text-4xl font-black text-red-600 tracking-tighter uppercase italic">Tick Tack Boom</h1>
-              <p className="text-slate-500 font-bold text-xs mt-2 uppercase tracking-widest">Party Edition</p>
+              <h1 className="text-4xl font-black text-red-600 tracking-tighter uppercase italic">Party Hub</h1>
+              <p className="text-slate-500 font-bold text-xs mt-2 uppercase tracking-widest">Multi-Game Edition</p>
             </header>
 
-            <div className="flex-1 space-y-4 overflow-y-auto pr-2">
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  value={newPlayerName}
-                  onChange={(e) => setNewPlayerName(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && (addPlayer(newPlayerName), setNewPlayerName(''))}
-                  placeholder="Όνομα παίκτη..."
-                  className="flex-1 bg-slate-900 border-2 border-slate-800 rounded-2xl px-4 py-3 focus:border-red-600 outline-none transition-all"
-                />
-                <button
-                  onClick={() => { addPlayer(newPlayerName); setNewPlayerName(''); }}
-                  className="bg-red-600 p-4 rounded-2xl active:scale-90 transition-transform"
-                >
-                  <UserPlus size={20} />
-                </button>
-              </div>
+            <div className="flex-1 space-y-8 overflow-y-auto pr-2">
+              <section className="space-y-4">
+                <div className="flex items-center space-x-2 mb-4">
+                  <Users className="text-red-500" size={20} />
+                  <h2 className="text-sm font-black uppercase tracking-widest text-slate-400">Players</h2>
+                </div>
+                <div className="grid grid-cols-1 gap-2">
+                  {players.map(player => (
+                    <motion.div
+                      layout="position"
+                      key={player.id}
+                      className="flex items-center justify-between bg-slate-900/50 p-4 rounded-2xl border border-slate-800"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: player.color }} />
+                        <span className="font-bold text-lg">{player.name}</span>
+                        <span className="text-xs text-slate-500">({teams.find(t => t.playerIds.includes(player.id))?.name || 'No team'})</span>
+                      </div>
+                      <button onClick={() => removePlayer(player.id)} className="text-slate-600 hover:text-red-500 p-2">
+                        <X size={18} />
+                      </button>
+                    </motion.div>
+                  ))}
+                </div>
+              </section>
 
-              <div className="grid grid-cols-1 gap-2">
-                {players.map(player => (
-                  <motion.div
-                    layout="position"
-                    key={player.id}
-                    className="flex items-center justify-between bg-slate-900/50 p-4 rounded-2xl border border-slate-800"
+              <section className="space-y-4">
+                <div className="flex items-center space-x-2 mb-4">
+                  <Gamepad2 className="text-red-500" size={20} />
+                  <h2 className="text-sm font-black uppercase tracking-widest text-slate-400">Select Game</h2>
+                </div>
+                <div className="grid grid-cols-1 gap-4">
+                  <button
+                    onClick={() => setCurrentGame('tick-tack-boom')}
+                    className="group relative overflow-hidden p-6 rounded-3xl bg-slate-900 border-2 border-slate-800 hover:border-red-600 transition-all text-left"
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: player.color }} />
-                      <span className="font-bold text-lg">{player.name}</span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="p-3 bg-red-600 rounded-2xl text-white group-hover:scale-110 transition-transform">
+                          <Bomb size={24} />
+                        </div>
+                        <div className="text-left">
+                          <h3 className="text-xl font-black uppercase italic">Tick Tack Boom</h3>
+                          <p className="text-xs text-slate-500">Fast-paced word bomb</p>
+                        </div>
+                      </div>
+                      <ArrowLeft className="rotate-180 text-slate-600 group-hover:text-white transition-colors" size={20} />
                     </div>
-                    <button onClick={() => removePlayer(player.id)} className="text-slate-600 hover:text-red-500 p-2">
-                      <X size={18} />
-                    </button>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+                  </button>
 
-            <footer className="py-6 space-y-3">
-              {players.length >= 2 ? (
-                <button
-                  onClick={startGame}
-                  className="w-full bg-white text-slate-950 font-black py-5 rounded-3xl text-xl flex items-center justify-center space-x-3 active:scale-95 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)]"
-                >
-                  <Play fill="currentColor" />
-                  <span>ΕΤΟΙΜΟΙ</span>
-                </button>
-              ) : (
-                <p className="text-center text-slate-600 text-sm font-bold uppercase animate-pulse">Προσθέστε τουλάχιστον 2 παίκτες</p>
-              )}
-            </footer>
-          </motion.div>
-        )}
-
-        {/* READY SCREEN */}
-        {gameState === GameState.READY && (
-          <motion.div
-            key="ready"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.1 }}
-            className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-12"
-          >
-            <div className="relative">
-              <motion.div
-                animate={{ scale: [1, 1.05, 1], rotate: [0, 1, -1, 0] }}
-                transition={{ repeat: Infinity, duration: 2 }}
-              >
-                <Bomb size={180} className="text-slate-800" />
-              </motion.div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-600/10 blur-3xl w-40 h-40 rounded-full" />
-            </div>
-
-            <div className="space-y-4">
-              <h2 className="text-5xl font-black italic tracking-tighter">ΠΑΜΕ;</h2>
-              <p className="text-slate-400 font-medium">Προετοιμάστε τον επόμενο παίκτη!</p>
-            </div>
-
-            <div className="w-full max-w-xs space-y-4">
-              <button
-                onClick={startRound}
-                className="w-full bg-red-600 text-white font-black py-6 rounded-3xl text-2xl shadow-[0_0_50px_rgba(220,38,38,0.3)] active:scale-95 transition-all"
-              >
-                ΕΚΚΙΝΗΣΗ
-              </button>
-              <button
-                onClick={backToSetup}
-                className="text-slate-500 font-bold hover:text-white transition-colors flex items-center justify-center space-x-2 w-full"
-              >
-                <Users size={16} />
-                <span>ΑΛΛΑΓΗ ΠΑΙΚΤΩΝ</span>
-              </button>
-            </div>
-          </motion.div>
-        )}
-
-        {/* PLAYING SCREEN */}
-        {gameState === GameState.PLAYING && (
-          <motion.div
-            key="playing"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="flex-1 flex flex-col bg-red-950/20"
-          >
-            <div className="flex-1 flex flex-col items-center justify-center p-6 space-y-8">
-              {/* Animated Bomb Background */}
-              <div className="relative mb-8">
-                <motion.div
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    color: ['#1e293b', '#ef4444', '#1e293b']
-                  }}
-                  transition={{
-                    duration: Math.max(0.1, (timeLeft || 1) / 30),
-                    repeat: Infinity
-                  }}
-                >
-                  <Bomb size={200} />
-                </motion.div>
-                {/* Heat glow */}
-                <motion.div
-                  className="absolute inset-0 bg-red-600 blur-[80px] rounded-full -z-10"
-                  animate={{ opacity: [0.1, 0.4, 0.1] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                />
-              </div>
-
-              {/* Game Info Cards */}
-              <div className="w-full grid grid-cols-2 gap-4">
-                <div className="bg-slate-900 border-2 border-slate-800 p-6 rounded-[2.5rem] text-center">
-                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] block mb-2">Κανόνας</span>
-                  <div className="text-4xl font-black">{currentDieMode}</div>
-                  <span className="text-[10px] text-red-500 font-bold block mt-2">
-                    {currentDieMode === DieMode.TIC && 'ΟΧΙ ΣΤΗΝ ΑΡΧΗ'}
-                    {currentDieMode === DieMode.TOC && 'ΟΧΙ ΣΤΟ ΤΕΛΟΣ'}
-                    {currentDieMode === DieMode.BOOM && 'ΟΠΟΥΔΗΠΟΤΕ'}
-                  </span>
+                  <button
+                    onClick={() => setCurrentGame('taboo')}
+                    className="group relative overflow-hidden p-6 rounded-3xl bg-slate-900 border-2 border-slate-800 hover:border-red-600 transition-all text-left"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="p-3 bg-blue-600 rounded-2xl text-white group-hover:scale-110 transition-transform">
+                          <MessageSquare size={24} />
+                        </div>
+                        <div className="text-left">
+                          <h3 className="text-xl font-black uppercase italic">Taboo</h3>
+                          <p className="text-xs text-slate-500">Forbidden word challenge</p>
+                        </div>
+                      </div>
+                      <ArrowLeft className="rotate-180 text-slate-600 group-hover:text-white transition-colors" size={20} />
+                    </div>
+                  </button>
                 </div>
-                <div className="bg-white p-6 rounded-[2.5rem] text-center shadow-2xl">
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-2">Συλλαβή</span>
-                  <div className="text-5xl font-black text-slate-900">{currentGram}</div>
+              </section>
+
+              <section className="space-y-4 pt-4 border-t border-slate-800">
+                <div className="flex items-center space-x-2 mb-4">
+                  <Users className="text-slate-500" size={20} />
+                  <h2 className="text-sm font-black uppercase tracking-widest text-slate-500">Setup Status</h2>
                 </div>
-              </div>
-            </div>
-
-            <div className="p-8 text-center italic text-slate-500 font-bold animate-pulse text-sm">
-              ΠΕΣ ΤΗ ΛΕΞΗ ΚΑΙ ΔΩΣΕ ΤΗ ΒΟΜΒΑ!
+                <div className="bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
+                  <p className="text-sm text-slate-400 mb-4">
+                    {isSetupComplete
+                      ? 'Setup complete! You have 2+ players assigned to 2+ teams.'
+                      : 'Please complete setup: create at least 2 players and 2 teams, then assign players to teams.'}
+                  </p>
+                  <button
+                    onClick={() => setCurrentGame('setup')}
+                    className="w-full py-3 bg-slate-800 hover:bg-slate-700 rounded-xl font-bold transition-colors text-sm"
+                  >
+                    Review Setup
+                  </button>
+                </div>
+              </section>
             </div>
           </motion.div>
         )}
 
-        {/* EXPLODED SCREEN */}
-        {gameState === GameState.EXPLODED && (
-          <motion.div
-            key="exploded"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex-1 flex flex-col p-6 items-center"
-          >
-            <motion.div
-              initial={{ scale: 0, rotate: -20 }}
-              animate={{ scale: 1, rotate: 0 }}
-              className="bg-red-600 text-white font-black text-6xl px-10 py-6 rounded-3xl shadow-[0_0_100px_rgba(220,38,38,0.6)] my-12 italic"
-            >
-              BOOM!
-            </motion.div>
-
-            <h3 className="text-xl font-bold text-slate-400 mb-6 uppercase tracking-widest text-center">Ποιος είχε τη βόμβα;</h3>
-
-            <div className="flex-1 w-full grid grid-cols-2 gap-3 overflow-y-auto max-w-sm">
-              {players.map(player => (
-                <button
-                  key={player.id}
-                  onClick={() => {
-                    incrementScore(player.id);
-                    confirmExplosion();
-                  }}
-                  className="p-6 rounded-3xl bg-slate-900 border-2 border-slate-800 active:bg-white active:text-slate-950 transition-all text-center flex flex-col items-center justify-center space-y-2 group"
-                >
-                  <div className="w-4 h-4 rounded-full" style={{ backgroundColor: player.color }} />
-                  <span className="font-black text-lg">{player.name}</span>
-                </button>
-              ))}
-            </div>
-
-            <button
-              onClick={cancelRound}
-              className="mt-6 text-slate-500 font-bold flex items-center space-x-2"
-            >
-              <RotateCcw size={16} />
-              <span>ΑΚΥΡΩΣΗ ΓΥΡΟΥ</span>
-            </button>
-          </motion.div>
+        {currentGame === 'tick-tack-boom' && (
+          <TickTackBoomGame
+            players={players}
+            addPlayer={addPlayer}
+            removePlayer={removePlayer}
+            incrementScore={incrementScore}
+            onBack={() => setCurrentGame('hub')}
+          />
         )}
 
+        {currentGame === 'taboo' && (
+          <TabooGame
+            players={players}
+            teams={teams}
+            addTeam={addTeam}
+            removeTeam={removeTeam}
+            addPlayerToTeam={addPlayerToTeam}
+            removePlayerFromTeam={removePlayerFromTeam}
+            updateTeamScore={updateTeamScore}
+            getTeamForPlayer={getTeamForPlayer}
+            getNextUpPlayer={getNextUpPlayer}
+            onBack={() => setCurrentGame('hub')}
+          />
+        )}
       </AnimatePresence>
 
-      {/* Floating Scoreboard Trigger */}
-      {gameState !== GameState.PLAYING && players.length > 0 && (
-        <Scoreboard players={players} onReset={resetScores} />
+      {players.length > 0 && currentGame === 'hub' && (
+        <Scoreboard players={players} teams={teams} onReset={() => { resetScores(); resetTeamScores(); }} />
       )}
 
       <style>{`
@@ -337,9 +237,10 @@ export default function App() {
   );
 }
 
-function Scoreboard({ players, onReset }: { players: Player[], onReset: () => void }) {
+function Scoreboard({ players, teams, onReset }: { players: Player[], teams: Team[], onReset: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+  const sortedTeams = [...teams].sort((a, b) => b.score - a.score);
 
   return (
     <>
@@ -363,20 +264,49 @@ function Scoreboard({ players, onReset }: { players: Player[], onReset: () => vo
               <button onClick={() => setIsOpen(false)} className="p-2"><X /></button>
             </div>
 
-            <div className="flex-1 space-y-4">
-              {sortedPlayers.map((player, idx) => (
-                <div key={player.id} className="flex items-center justify-between bg-slate-900 p-6 rounded-3xl border border-slate-800">
-                  <div className="flex items-center space-x-4">
-                    <span className="text-slate-600 font-black text-2xl">{idx + 1}</span>
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: player.color }} />
-                    <span className="font-bold text-xl">{player.name}</span>
-                  </div>
-                  <div className="bg-red-600/20 text-red-500 px-4 py-1 rounded-full font-black">
-                    {player.score} BOOMS
-                  </div>
+            {/* Team Scores */}
+            {teams.length > 0 && (
+              <section className="mb-8">
+                <h3 className="text-sm font-black uppercase tracking-widest text-slate-500 mb-4">Team Standings</h3>
+                <div className="space-y-2">
+                  {sortedTeams.map((team, idx) => (
+                    <div key={team.id} className="flex items-center justify-between bg-slate-900 p-4 rounded-2xl border border-slate-800">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-slate-600 font-black text-xl">{idx + 1}</span>
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: team.color }} />
+                        <span className="font-bold text-lg">{team.name}</span>
+                      </div>
+                      <div className="bg-red-600/20 text-red-500 px-4 py-1 rounded-full font-black">
+                        {team.score} PTS
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </section>
+            )}
+
+            {/* Player Scores */}
+            <section>
+              <h3 className="text-sm font-black uppercase tracking-widest text-slate-500 mb-4">Individual Standings</h3>
+              <div className="space-y-2">
+                {sortedPlayers.map((player, idx) => {
+                  const team = teams.find(t => t.playerIds.includes(player.id));
+                  return (
+                    <div key={player.id} className="flex items-center justify-between bg-slate-900 p-4 rounded-2xl border border-slate-800">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-slate-600 font-black text-xl">{idx + 1}</span>
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: player.color }} />
+                        <span className="font-bold text-xl">{player.name}</span>
+                        {team && <span className="text-xs text-slate-500">({team.name})</span>}
+                      </div>
+                      <div className="bg-red-600/20 text-red-500 px-4 py-1 rounded-full font-black">
+                        {player.score} PTS
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
 
             <button
               onClick={() => { if (confirm('Είστε σίγουροι;')) { onReset(); setIsOpen(false); } }}
