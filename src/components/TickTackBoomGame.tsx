@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGame, GameState, DieMode } from '../hooks/useGame';
-import { Player } from '../hooks/usePlayers';
+import { Player } from '../contexts/PlayersContext';
 import { Bomb, Play, X } from 'lucide-react';
 import { soundManager } from '../utils/soundManager';
 

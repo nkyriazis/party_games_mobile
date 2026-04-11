@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePlayers, Player } from './hooks/usePlayers';
+import { PlayersProvider, usePlayers, Player } from './contexts/PlayersContext';
 import { useTeams, Team } from './hooks/useTeams';
 import {
   X, Trophy, Users, Trash2, Maximize, Minimize,
@@ -16,7 +16,7 @@ import { SetupPage } from './components/SetupPage';
 
 type GameId = 'setup' | 'hub' | 'tick-tack-boom' | 'taboo';
 
-export default function App() {
+function AppContent() {
   const [currentGame, setCurrentGame] = useState<GameId>('setup');
   const { players, removePlayer, incrementScore, resetScores } = usePlayers();
   const { teams, updateTeamScore, getTeamForPlayer, getNextUpPlayer, resetScores: resetTeamScores } = useTeams(players);
@@ -67,8 +67,8 @@ export default function App() {
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
-  // Check if setup is complete
-  const isSetupComplete = players.length >= 2 && teams.length >= 2 && players.every(p => teams.some(t => t.playerIds.includes(p.id)));
+  // Check if setup is complete (only requires players, teams are optional)
+  const isSetupComplete = players.length >= 2;
 
   return (
     <div className="min-h-screen bg-slate-950 text-white font-sans select-none overflow-hidden flex flex-col">
@@ -184,8 +184,8 @@ export default function App() {
                 <div className="bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
                   <p className="text-sm text-slate-400 mb-4">
                     {isSetupComplete
-                      ? 'Setup complete! You have 2+ players assigned to 2+ teams.'
-                      : 'Please complete setup: create at least 2 players and 2 teams, then assign players to teams.'}
+                      ? 'Setup complete! You have 2+ players ready to play.'
+                      : 'Please complete setup: create at least 2 players.'}
                   </p>
                   <button
                     onClick={() => setCurrentGame('setup')}
@@ -215,6 +215,7 @@ export default function App() {
             getTeamForPlayer={getTeamForPlayer}
             getNextUpPlayer={getNextUpPlayer}
             onBack={() => setCurrentGame('hub')}
+            setCurrentGame={setCurrentGame}
           />
         )}
       </AnimatePresence>
@@ -228,6 +229,14 @@ export default function App() {
         * { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <PlayersProvider>
+      <AppContent />
+    </PlayersProvider>
   );
 }
 

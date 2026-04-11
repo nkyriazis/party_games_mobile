@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTaboo } from '../hooks/useTaboo';
 import { TabooCardComponent } from '../components/TabooCard';
 import { motion } from 'framer-motion';
-import { Player } from '../hooks/usePlayers';
+import { Player } from '../contexts/PlayersContext';
 import { Team } from '../hooks/useTeams';
 
 export const TabooGame: React.FC<{
@@ -11,8 +11,9 @@ export const TabooGame: React.FC<{
   updateTeamScore: (teamId: string, delta: number) => void,
   getTeamForPlayer: (playerId: string) => Team | undefined,
   getNextUpPlayer: () => { player: Player | undefined, team: Team | undefined },
-  onBack: () => void
-}> = ({ players, teams: _teams, updateTeamScore, getTeamForPlayer, getNextUpPlayer, onBack }) => {
+  onBack: () => void,
+  setCurrentGame: (game: 'setup' | 'hub' | 'tick-tack-boom' | 'taboo') => void
+}> = ({ players, teams: _teams, updateTeamScore, getTeamForPlayer, getNextUpPlayer, onBack, setCurrentGame }) => {
   const [activePlayerId, setActivePlayerId] = useState<string | null>(null);
   const [gameState, setGameState] = useState<'select-player' | 'game' | 'round-over'>('select-player');
 
@@ -44,6 +45,36 @@ export const TabooGame: React.FC<{
 
   // Setup screen - select player to describe words
   if (gameState === 'select-player') {
+    // No players in teams - show warning screen
+    if (playersInTeams.length === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-slate-950 text-white">
+          <h1 className="text-4xl font-black mb-8 text-red-500">TABOO</h1>
+          <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-6 max-w-md text-center mb-8">
+            <h2 className="text-2xl font-black text-amber-500 mb-4">Teams Required</h2>
+            <p className="text-slate-300 mb-4">
+              Taboo requires players to be assigned to teams for scoring.
+            </p>
+            <p className="text-sm text-slate-500">
+              Players not in teams cannot play Taboo.
+            </p>
+          </div>
+          <button
+            onClick={onBack}
+            className="px-8 py-4 bg-white text-slate-950 font-black rounded-2xl text-xl hover:bg-slate-100 active:scale-95 transition-all"
+          >
+            Back to Hub
+          </button>
+          <button
+            onClick={() => setCurrentGame('setup')}
+            className="mt-4 text-slate-500 hover:text-white transition-colors text-sm"
+          >
+            Go to Setup →
+          </button>
+        </div>
+      );
+    }
+
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-slate-950 text-white">
         <h1 className="text-4xl font-black mb-8 text-red-500">TABOO</h1>
@@ -67,10 +98,6 @@ export const TabooGame: React.FC<{
             </button>
           ))}
         </div>
-
-        {playersInTeams.length === 0 && (
-          <p className="text-red-400 mb-4">Assign players to teams first!</p>
-        )}
 
         <button
           onClick={onBack}

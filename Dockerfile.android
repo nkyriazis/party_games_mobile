@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.4
-# Simple Android APK builder - no caching, builds at container runtime
+# Android APK builder - prepares environment for runtime build
 
 FROM node:20-bookworm-slim
 
@@ -43,11 +43,8 @@ COPY package*.json ./
 RUN npm ci --omit=optional 2>/dev/null || npm install --omit=optional
 RUN npm ci --include=optional 2>/dev/null || npm install --include=optional
 
-# Copy source code
-COPY . .
-
-# Build web app
-RUN npm run build
+# Copy build scripts
+COPY scripts/ ./scripts/
 
 # Make build script executable
 RUN chmod +x scripts/build-android.sh
@@ -56,5 +53,8 @@ RUN chmod +x scripts/build-android.sh
 ENV ANDROID_HOME=/opt/android-sdk
 ENV PATH=${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/34.0.0
 
-# Build APK at container runtime (not build time)
-CMD ["bash", "scripts/build-android.sh"]
+# Container entrypoint - builds and then runs build-android.sh
+# Source is mounted at runtime via docker-compose.yml
+COPY scripts/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]

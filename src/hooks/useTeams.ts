@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Player } from './usePlayers';
+import { Player } from '../contexts/PlayersContext';
 
 export interface Team {
   id: string;

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { usePlayers } from '../hooks/usePlayers';
+import { usePlayers } from '../contexts/PlayersContext';
 import { useTeams } from '../hooks/useTeams';
 import { UserPlus, X, Users, Gamepad2, ArrowRight, Edit, Camera } from 'lucide-react';
 
@@ -131,12 +131,10 @@ export const SetupPage: React.FC<{
     }
   };
 
-  const allPlayersAssigned = players.length > 0 && players.every(p => teams.some(t => t.playerIds.includes(p.id)));
-  const hasTeams = teams.length >= 2;
   const hasPlayers = players.length >= 2;
 
   const handleComplete = () => {
-    if (hasTeams && hasPlayers && allPlayersAssigned) {
+    if (hasPlayers) {
       onComplete();
     }
   };
@@ -310,12 +308,12 @@ export const SetupPage: React.FC<{
           <div className="bg-slate-900/50 rounded-2xl border border-slate-800 p-4">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-xs font-black uppercase tracking-widest text-slate-500">Team Assignment</h3>
-              <span className={`text-xs px-2 py-1 rounded-full ${allPlayersAssigned ? 'bg-green-500/20 text-green-500' : 'bg-amber-500/20 text-amber-500'}`}>
-                {allPlayersAssigned ? 'All assigned' : `${players.filter(p => !getTeamForPlayer(p.id)).length} unassigned`}
+              <span className="text-xs px-2 py-1 rounded-full bg-slate-700/30 text-slate-400">
+                Optional for team games
               </span>
             </div>
             <p className="text-xs text-slate-500 mb-3">
-              Players can be moved between teams at any time. At least 2 teams required.
+              Create teams for games like Taboo. Not required for Tick Tack Boom.
             </p>
             <div className="space-y-2 max-h-48 overflow-y-auto">
               {players.map(player => {
@@ -448,11 +446,9 @@ export const SetupPage: React.FC<{
       <div className="mt-6 pt-6 border-t border-slate-800 space-y-4">
         <button
           onClick={handleComplete}
-          disabled={
-            !hasTeams || !hasPlayers || !allPlayersAssigned
-          }
+          disabled={!hasPlayers}
           className={`w-full py-4 rounded-2xl font-black text-xl transition-all flex items-center justify-center space-x-2 ${
-            hasTeams && hasPlayers && allPlayersAssigned
+            hasPlayers
               ? 'bg-white text-slate-950 hover:bg-slate-100 active:scale-95'
               : 'bg-slate-800 text-slate-500 cursor-not-allowed'
           }`}
@@ -461,11 +457,9 @@ export const SetupPage: React.FC<{
           <ArrowRight size={20} />
         </button>
 
-        {(!hasTeams || !hasPlayers || !allPlayersAssigned) && (
+        {!hasPlayers && (
           <p className="text-center text-xs text-slate-600">
-            {(!hasPlayers && 'Add at least 2 players') ||
-            (!hasTeams && 'Create at least 2 teams') ||
-            (!allPlayersAssigned && 'Assign all players to teams')}
+            Add at least 2 players to start
           </p>
         )}
       </div>
