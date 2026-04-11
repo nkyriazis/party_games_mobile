@@ -19,7 +19,7 @@ type GameId = 'setup' | 'hub' | 'tick-tack-boom' | 'taboo';
 export default function App() {
   const [currentGame, setCurrentGame] = useState<GameId>('setup');
   const { players, addPlayer, removePlayer, incrementScore, resetScores } = usePlayers();
-  const { teams, addTeam, removeTeam, addPlayerToTeam, removePlayerFromTeam, updateTeamScore, getTeamForPlayer, getNextUpPlayer, resetScores: resetTeamScores } = useTeams(players);
+  const { teams, removeTeam, addPlayerToTeam, removePlayerFromTeam, updateTeamScore, getTeamForPlayer, getNextUpPlayer, resetScores: resetTeamScores } = useTeams(players);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Automatic fullscreen on native launch
@@ -213,7 +213,6 @@ export default function App() {
           <TabooGame
             players={players}
             teams={teams}
-            addTeam={addTeam}
             removeTeam={removeTeam}
             addPlayerToTeam={addPlayerToTeam}
             removePlayerFromTeam={removePlayerFromTeam}

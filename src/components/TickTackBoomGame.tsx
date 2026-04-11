@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGame, GameState, DieMode } from '../hooks/useGame';
 import { Player } from '../hooks/usePlayers';
@@ -21,9 +21,11 @@ export const TickTackBoomGame: React.FC<{
     startGame,
     startRound,
     confirmExplosion,
-    cancelRound,
-    backToSetup
+    cancelRound
   } = useGame();
+
+  const [showPlayerSelect, setShowPlayerSelect] = useState(false);
+  const [selectedPlayers, setSelectedPlayers] = useState<Set<string>>(new Set());
 
   // Audio control loop
   const lastTickRef = useRef<number>(0);
@@ -47,6 +49,108 @@ export const TickTackBoomGame: React.FC<{
     }
   }, [gameState]);
 
+  // Show player selection screen when entering SETUP with existing players
+  useEffect(() => {
+    if (gameState === GameState.SETUP && players.length > 0 && !showPlayerSelect) {
+      setShowPlayerSelect(true);
+    }
+  }, [gameState, players.length, showPlayerSelect]);
+
+  const togglePlayerSelection = (playerId: string) => {
+    setSelectedPlayers(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(playerId)) {
+        newSet.delete(playerId);
+      } else {
+        newSet.add(playerId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleBackToHub = () => {
+    setSelectedPlayers(new Set());
+    setShowPlayerSelect(false);
+    onBack();
+  };
+
+  // Show player selection screen if showing selection or if we have players
+  if (showPlayerSelect || (players.length > 0 && gameState === GameState.SETUP)) {
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div
+          key="setup"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          className="flex-1 flex flex-col p-6 max-w-md mx-auto w-full"
+        >
+          <header className="py-6 text-center relative">
+            <h1 className="text-4xl font-black text-red-600 tracking-tighter uppercase italic">Tick Tack Boom</h1>
+            <p className="text-slate-500 font-bold text-xs mt-2 uppercase tracking-widest">Party Edition</p>
+            <p className="text-sm text-slate-400 mt-4">
+              {showPlayerSelect ? 'Select players for this round' : `${players.length} existing players`}
+            </p>
+          </header>
+
+          <div className="flex-1 space-y-3 overflow-y-auto pr-2">
+            {players.map(player => (
+              <motion.div
+                layout="position"
+                key={player.id}
+                onClick={() => togglePlayerSelection(player.id)}
+                className={`flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all ${
+                  selectedPlayers.has(player.id)
+                    ? 'bg-red-600/10 border-red-600'
+                    : 'bg-slate-900/50 border-slate-800 hover:border-slate-700'
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${
+                    selectedPlayers.has(player.id) ? 'border-red-600 bg-red-600' : 'border-slate-600'
+                  }`}>
+                    {selectedPlayers.has(player.id) && (
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                  </div>
+                  <span className={`font-bold text-lg ${selectedPlayers.has(player.id) ? 'text-white' : 'text-slate-300'}`}>{player.name}</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <footer className="py-6 space-y-3">
+            {selectedPlayers.size >= 2 ? (
+              <button
+                onClick={() => {
+                  setShowPlayerSelect(false);
+                  startGame();
+                }}
+                className="w-full bg-white text-slate-950 font-black py-5 rounded-3xl text-xl flex items-center justify-center space-x-3 active:scale-95 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+              >
+                <Play fill="currentColor" />
+                <span>ΕΤΟΙΜΟΙ</span>
+              </button>
+            ) : (
+              <p className="text-center text-slate-500 text-sm font-bold uppercase">
+                {selectedPlayers.size === 0 ? 'Select at least 2 players' : `Select ${2 - selectedPlayers.size} more player(s)`}
+              </p>
+            )}
+            <button
+              onClick={handleBackToHub}
+              className="w-full text-slate-500 font-bold py-3 hover:text-white transition-colors text-sm uppercase tracking-widest"
+            >
+              ← Back to Hub
+            </button>
+          </footer>
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
+
+  // Default SETUP screen (when no players exist)
   return (
     <AnimatePresence mode="wait">
       {gameState === GameState.SETUP && (
@@ -159,7 +263,7 @@ export const TickTackBoomGame: React.FC<{
               ΕΚΚΙΝΗΣΗ
             </button>
             <button
-              onClick={backToSetup}
+              onClick={() => setShowPlayerSelect(true)}
               className="text-slate-500 font-bold hover:text-white transition-colors flex items-center justify-center space-x-2 w-full"
             >
               <span className="text-sm uppercase">ΑΛΛΑΓΗ ΠΑΙΚΤΩΝ</span>

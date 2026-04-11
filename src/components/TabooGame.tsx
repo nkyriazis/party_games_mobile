@@ -8,7 +8,6 @@ import { Team } from '../hooks/useTeams';
 export const TabooGame: React.FC<{
   players: Player[],
   teams: Team[],
-  addTeam: (name: string) => void,
   removeTeam: (id: string) => void,
   addPlayerToTeam: (playerId: string, teamId: string) => void,
   removePlayerFromTeam: (playerId: string, teamId: string) => void,
@@ -16,9 +15,13 @@ export const TabooGame: React.FC<{
   getTeamForPlayer: (playerId: string) => Team | undefined,
   getNextUpPlayer: () => { player: Player | undefined, team: Team | undefined },
   onBack: () => void
-}> = ({ players, teams, addTeam, removeTeam, addPlayerToTeam, removePlayerFromTeam, updateTeamScore, getTeamForPlayer, getNextUpPlayer, onBack }) => {
+}> = ({ players, teams, removeTeam, addPlayerToTeam, removePlayerFromTeam, updateTeamScore, getTeamForPlayer, getNextUpPlayer, onBack }) => {
   const [activePlayerId, setActivePlayerId] = useState<string | null>(null);
-  const [teamSelectionState, setTeamSelectionState] = useState<'setup' | 'team-select' | 'game'>('setup');
+  const [teamSelectionState, setTeamSelectionState] = useState<'setup' | 'team-select' | 'game'>(
+    teams.length > 0
+      ? 'team-select'  // Teams exist, show player selection
+      : 'setup'  // No teams, show setup
+  );
 
   const {
     currentCard,
@@ -40,38 +43,7 @@ export const TabooGame: React.FC<{
         <h1 className="text-4xl font-black mb-8 text-red-500">TABOO</h1>
         <div className="space-y-6 w-full max-w-md">
           <div className="space-y-3">
-            <h2 className="text-xl font-bold text-slate-400">Add Teams</h2>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Team name..."
-                className="flex-1 bg-slate-900 border-2 border-slate-800 rounded-2xl px-4 py-3 focus:border-red-500 outline-none transition-all text-white"
-                id="team-name-input"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    const input = e.target as HTMLInputElement;
-                    const teamName = input.value.trim();
-                    if (teamName) {
-                      addTeam(teamName);
-                    }
-                    input.value = '';
-                  }
-                }}
-              />
-              <button
-                onClick={() => {
-                  const input = document.getElementById('team-name-input') as HTMLInputElement;
-                  const teamName = input.value.trim();
-                  if (teamName) {
-                    addTeam(teamName);
-                  }
-                  input.value = '';
-                }}
-                className="bg-red-600 p-4 rounded-2xl active:scale-90 transition-transform text-white"
-              >
-                <span className="text-xs font-bold">ADD</span>
-              </button>
-            </div>
+            <h2 className="text-xl font-bold text-slate-400">Teams</h2>
             <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto">
               {teams.map(team => (
                 <motion.div
@@ -93,7 +65,7 @@ export const TabooGame: React.FC<{
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-xl font-bold text-slate-400">Assign Players to Teams</h2>
+            <h2 className="text-xl font-bold text-slate-400">Players</h2>
             <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto">
               {players.map(player => {
                 const team = getTeamForPlayer(player.id);
@@ -174,7 +146,7 @@ export const TabooGame: React.FC<{
           <p className="text-red-400 mb-4">Assign players to teams first!</p>
         )}
         <button
-          onClick={() => setTeamSelectionState('setup')}
+          onClick={onBack}
           className="mt-8 text-slate-500 hover:text-white transition-colors"
         >
           ← Back to Setup
