@@ -5,6 +5,7 @@ export interface Player {
   name: string;
   score: number;
   color: string;
+  avatar?: string;
 }
 
 const COLORS = [
@@ -21,19 +22,27 @@ const COLORS = [
 export const usePlayers = () => {
   const [players, setPlayers] = useState<Player[]>(() => {
     const saved = localStorage.getItem('tick-tack-boom-players');
-    return saved ? JSON.parse(saved) : [];
+    if (saved) {
+      const parsed = JSON.parse(saved) as Player[];
+      // Ensure avatar is undefined if not present (handles old saved data)
+      return parsed.map(p => ({
+        ...p,
+        avatar: p.avatar,
+      }));
+    }
+    return [];
   });
 
   useEffect(() => {
     localStorage.setItem('tick-tack-boom-players', JSON.stringify(players));
   }, [players]);
 
-  const addPlayer = useCallback((name: string) => {
+  const addPlayer = useCallback((name: string, avatar?: string) => {
     if (!name.trim()) return;
-    const id = typeof crypto.randomUUID === 'function' 
-      ? crypto.randomUUID() 
+    const id = typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID()
       : Math.random().toString(36).substring(2) + Date.now().toString(36);
-    
+
     setPlayers(prev => [
       ...prev,
       {
@@ -41,6 +50,7 @@ export const usePlayers = () => {
         name: name.trim(),
         score: 0,
         color: COLORS[prev.length % COLORS.length],
+        avatar,
       }
     ]);
   }, []);

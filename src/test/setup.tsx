@@ -12,13 +12,21 @@ Object.defineProperty(window, 'crypto', {
 // Mock framer-motion components to be static in tests
 vi.mock('framer-motion', async (importOriginal) => {
   const actual = await importOriginal() as any;
+  const { forwardRef } = React;
+
   return {
     ...actual,
     motion: {
       ...actual.motion,
-      div: React.forwardRef(({ children, ...props }: any, ref) => (
-        <div {...props} ref={ref}>{children}</div>
-      )),
+      div: forwardRef(({ children, animate, initial, ...props }: any, ref) => {
+        // For tests, just render children without animation
+        // Remove animate and initial props which can cause issues
+        return <div {...props} ref={ref}>{children}</div>;
+      }),
+      section: forwardRef(({ children, animate, initial, ...props }: any, ref) => {
+        return <section {...props} ref={ref}>{children}</section>;
+      }),
+      AnimatePresence: ({ children }: any) => <>{children}</>,
     },
     AnimatePresence: ({ children }: any) => <>{children}</>,
   };

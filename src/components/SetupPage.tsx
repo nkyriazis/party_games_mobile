@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { usePlayers } from '../hooks/usePlayers';
 import { useTeams } from '../hooks/useTeams';
-import { UserPlus, X, Users, Gamepad2, ArrowRight, Edit } from 'lucide-react';
+import { UserPlus, X, Users, Gamepad2, ArrowRight, Edit, Camera } from 'lucide-react';
 
 export const SetupPage: React.FC<{
   onComplete: () => void;
@@ -12,11 +12,106 @@ export const SetupPage: React.FC<{
   const [newPlayerName, setNewPlayerName] = useState('');
   const [newTeamName, setNewTeamName] = useState('');
   const [isTeamManagerOpen, setIsTeamManagerOpen] = useState(false);
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [cameraFacing, setCameraFacing] = useState<'user' | 'environment'>('user');
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const [capturedAvatar, setCapturedAvatar] = useState<string | null>(null);
+
+  // Cleanup camera stream on unmount
+  useEffect(() => {
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, []);
+
+  // Handle camera toggle
+  const toggleCamera = async () => {
+    if (isCameraOpen) {
+      // Close camera
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
+      }
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
+      }
+      setIsCameraOpen(false);
+      setCameraError(null);
+      setCapturedAvatar(null);
+    } else {
+      // Open camera
+      setCameraError(null);
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: cameraFacing },
+        });
+        streamRef.current = stream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+        setIsCameraOpen(true);
+      } catch (err) {
+        console.error('Camera error:', err);
+        setCameraError('Could not access camera. Please check permissions.');
+      }
+    }
+  };
+
+  // Toggle camera facing (front/rear)
+  const toggleCameraFacing = async () => {
+    if (streamRef.current) {
+      // Stop current stream
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+
+      // Open other camera
+      const newFacing = cameraFacing === 'user' ? 'environment' : 'user';
+      setCameraFacing(newFacing);
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: newFacing },
+        });
+        streamRef.current = stream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } catch (err) {
+        console.error('Camera switch error:', err);
+        setCameraError('Could not switch camera.');
+      }
+    }
+  };
+
+  // Capture photo from camera
+  const capturePhoto = useCallback(() => {
+    const video = videoRef.current;
+    if (!video || !streamRef.current) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      // Mirror the video for front camera
+      if (cameraFacing === 'user') {
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+      }
+      ctx.drawImage(video, 0, 0);
+      const avatarData = canvas.toDataURL('image/jpeg', 0.8);
+      setCapturedAvatar(avatarData);
+    }
+  }, [cameraFacing]);
 
   const handleAddPlayer = () => {
     if (newPlayerName.trim()) {
-      addPlayer(newPlayerName);
+      addPlayer(newPlayerName, capturedAvatar || undefined);
       setNewPlayerName('');
+      setCapturedAvatar(null);
     }
   };
 
@@ -82,6 +177,17 @@ export const SetupPage: React.FC<{
             >
               <UserPlus size={20} />
             </button>
+            <button
+              onClick={toggleCamera}
+              className={`p-4 rounded-2xl active:scale-90 transition-transform border-2 ${
+                isCameraOpen
+                  ? 'bg-red-600 border-red-700 text-white'
+                  : 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white hover:border-slate-600'
+              }`}
+              title="Open camera to capture avatar"
+            >
+              <Camera size={20} />
+            </button>
           </div>
           <div className="grid grid-cols-1 gap-2">
             {players.map(player => (
@@ -91,11 +197,21 @@ export const SetupPage: React.FC<{
                 className="flex items-center justify-between bg-slate-900/50 p-4 rounded-2xl border border-slate-800 group"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: player.color }} />
-                  <span className="font-bold text-lg">{player.name}</span>
-                  <span className="text-xs text-slate-500">
-                    {getTeamForPlayer(player.id) ? `on ${getTeamForPlayer(player.id)!.name}` : 'no team'}
-                  </span>
+                  {player.avatar ? (
+                    <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-slate-700 flex-shrink-0">
+                      <img src={player.avatar} alt={player.name} className="w-full h-full object-cover" />
+                    </div>
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border-2 border-slate-700 flex-shrink-0">
+                      <span className="text-sm font-bold text-slate-400">{player.name.charAt(0).toUpperCase()}</span>
+                    </div>
+                  )}
+                  <div className="overflow-hidden">
+                    <span className="font-bold text-lg block truncate">{player.name}</span>
+                    <span className="text-xs text-slate-500">
+                      {getTeamForPlayer(player.id) ? `on ${getTeamForPlayer(player.id)!.name}` : 'no team'}
+                    </span>
+                  </div>
                 </div>
                 <button onClick={() => removePlayer(player.id)} className="text-slate-600 hover:text-red-500 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <X size={18} />
@@ -229,6 +345,103 @@ export const SetupPage: React.FC<{
             </div>
           </div>
         </section>
+
+        {/* Camera Capture Modal */}
+        <motion.div
+          initial={false}
+          animate={{ height: isCameraOpen ? 'auto' : 0, opacity: isCameraOpen ? 1 : 0 }}
+          className="overflow-hidden"
+        >
+          <div className="bg-slate-900/50 rounded-2xl border border-slate-800 p-4 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Camera className="text-red-500" size={20} />
+                <h2 className="text-sm font-black uppercase tracking-widest text-slate-400">Camera</h2>
+              </div>
+              <button
+                onClick={toggleCamera}
+                className="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1 rounded transition-colors"
+              >
+                Close
+              </button>
+            </div>
+
+            {cameraError ? (
+              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4">
+                <p className="text-red-400 text-sm text-center">{cameraError}</p>
+                <button
+                  onClick={toggleCamera}
+                  className="mt-3 w-full bg-red-600 text-white py-2 rounded-xl text-sm font-bold hover:bg-red-700 transition-colors"
+                >
+                  Retry
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="relative aspect-video bg-slate-950 rounded-xl overflow-hidden">
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="w-full h-full object-cover"
+                  />
+                  {!capturedAvatar && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-slate-600 text-xs uppercase tracking-widest text-center px-4">
+                        Position your face<br />for the avatar
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex space-x-3">
+                  <button
+                    onClick={toggleCameraFacing}
+                    className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-xl transition-colors flex items-center justify-center space-x-2 disabled:opacity-50"
+                    disabled={!streamRef.current}
+                  >
+                    <Camera size={18} className="rotate-180" />
+                    <span className="text-sm font-bold uppercase">
+                      {cameraFacing === 'user' ? 'Rear Camera' : 'Front Camera'}
+                    </span>
+                  </button>
+                  <button
+                    onClick={capturePhoto}
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl transition-colors flex items-center justify-center space-x-2 disabled:opacity-50"
+                    disabled={!streamRef.current}
+                  >
+                    <Camera size={18} />
+                    <span className="text-sm font-bold uppercase">Capture</span>
+                  </button>
+                </div>
+
+                {capturedAvatar && (
+                  <div className="bg-slate-950/50 border border-slate-700 rounded-xl p-4 flex items-center space-x-4">
+                    <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-green-500/50">
+                      <img
+                        src={capturedAvatar}
+                        alt="Avatar preview"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-white">Avatar Ready</p>
+                      <p className="text-xs text-slate-500">Add this avatar when creating a player</p>
+                    </div>
+                    <button
+                      onClick={() => setCapturedAvatar(null)}
+                      className="text-slate-500 hover:text-red-500 p-2 transition-colors"
+                      title="Remove avatar"
+                    >
+                      <X size={20} />
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </motion.div>
       </div>
 
       {/* Footer - Complete Button */}

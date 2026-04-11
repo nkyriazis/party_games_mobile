@@ -7,7 +7,7 @@ import { soundManager } from '../utils/soundManager';
 
 export const TickTackBoomGame: React.FC<{
   players: Player[],
-  addPlayer: (name: string) => void,
+  addPlayer: (name: string, avatar?: string) => void,
   removePlayer: (id: string) => void,
   incrementScore: (id: string) => void,
   onBack: () => void
