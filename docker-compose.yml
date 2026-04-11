@@ -1,54 +1,8 @@
-version: '3.8'
-
 services:
-  app:
-    build:
-      context: .
-      target: development
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/dist
-      - /app/android/build
-      - /app/android/app/build
-      - android-gradle-cache:/root/.gradle
-      - android-sdk-cache:/opt/android-sdk
-    ports:
-      - "5173:5173"
-    environment:
-      - CHOKIDAR_USEPOLLING=true # Better watch performance in some Docker setups
-    stdin_open: true
-    tty: true
-
-  production:
-    build:
-      context: .
-      target: production
-    ports:
-      - "8080:80"
-
   android-build:
     build:
       context: .
       dockerfile: Dockerfile.android
-      args:
-        - USE_CACHE=true
-      cache_from:
-        - tick_tack_boom-android-build:latest
     volumes:
       - .:/app
-      - /app/node_modules
-      - /app/dist
       - ./build-output:/app/build-output
-      - android-gradle-cache:/root/.gradle
-      - android-sdk-cache:/opt/android-sdk
-    # Use BuildKit cache mounts for Gradle
-    x-buildkit: &buildkit
-      dockerfile: Dockerfile.android
-      cache-from: tick_tack_boom-android-build:latest
-      cache-to: type=local,dest=/tmp/gradle-cache,mode=max
-
-# Define named volumes for caching (persisted across builds)
-volumes:
-  android-gradle-cache:
-  android-sdk-cache:

@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 
-# Incremental build script - skips steps when source hasn't changed
+# Build script for Android APK
+# Builds web app using the original vite.config.ts
 
 BUILD_OUTPUT_DIR="/app/build-output"
 APK_PATH="${BUILD_OUTPUT_DIR}/tick-tack-boom.apk"
-WEB_BUILD_CACHE_DIR="/tmp/web-build-cache"
 
 echo "Starting Android build..."
 
@@ -27,35 +27,18 @@ else
     npm run assets:android
 fi
 
-# Only rebuild web app if source changed
-if [ -d "${WEB_BUILD_CACHE_DIR}" ] && [ ! "src" -nt "${WEB_BUILD_CACHE_DIR}" ]; then
-    echo "Restoring web build from cache..."
-    cp -r "${WEB_BUILD_CACHE_DIR}" dist
-else
-    echo "Building web application..."
-    npm run build
-    # Cache web build for future runs
-    rm -rf "${WEB_BUILD_CACHE_DIR}"
-    cp -r dist "${WEB_BUILD_CACHE_DIR}"
-fi
+# Build web app
+echo "Building web application..."
+npm run build
 
-# Only sync Capacitor if config or source changed
-if [ ! -d "android" ] || [ "capacitor.config.json" -nt "android/settings.gradle" ]; then
-    echo "Syncing Capacitor..."
-    npx cap sync android
-else
-    echo "Skipping Capacitor sync (config unchanged)"
-fi
+# Sync Capacitor
+echo "Syncing Capacitor..."
+npx cap sync android
 
-# Build Android APK only if source changed
+# Build Android APK
 cd android
-APK_OUTPUT="app/build/outputs/apk/debug/tick-tack-boom-debug.apk"
-if [ -f "${APK_OUTPUT}" ] && [ ! "../dist" -nt "${APK_OUTPUT}" ]; then
-    echo "Skipping Android build (APK up to date)"
-else
-    echo "Building Android APK..."
-    ./gradlew assembleDebug --no-daemon
-fi
+echo "Building Android APK..."
+./gradlew assembleDebug --no-daemon
 cd ..
 
 # Copy APK to output directory
