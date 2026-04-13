@@ -130,7 +130,7 @@ export const TickTackBoomGame: React.FC<{
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
-          className="flex-1 flex flex-col p-6 max-w-md mx-auto w-full"
+          className="flex-1 flex flex-col p-4 sm:p-6 max-w-md mx-auto w-full"
         >
           <header className="py-6 text-center relative">
             <h1 className="text-4xl font-black text-red-600 tracking-tighter uppercase italic">Tick Tack Boom</h1>
@@ -140,24 +140,24 @@ export const TickTackBoomGame: React.FC<{
             </p>
           </header>
 
-          <div className="mb-6 bg-slate-900/40 border border-slate-800 rounded-2xl p-4 space-y-4">
+          <div className="mb-6 ui-panel-soft space-y-4">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <div className="text-xs uppercase tracking-widest text-slate-500">Rounds</div>
+                <div className="ui-kicker">Rounds</div>
                 <div className="text-3xl font-black text-white mt-2">{totalRounds}</div>
               </div>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setTotalRounds((prev) => Math.max(1, prev - 1))}
-                  className="h-11 w-11 rounded-2xl bg-slate-800 hover:bg-slate-700 text-xl font-black transition-colors"
+                  className="ui-btn-square"
                 >
                   -
                 </button>
                 <button
                   type="button"
                   onClick={() => setTotalRounds((prev) => Math.min(20, prev + 1))}
-                  className="h-11 w-11 rounded-2xl bg-slate-800 hover:bg-slate-700 text-xl font-black transition-colors"
+                  className="ui-btn-square"
                 >
                   +
                 </button>
@@ -181,12 +181,14 @@ export const TickTackBoomGame: React.FC<{
             </div>
           </div>
 
-          <div className="flex-1 space-y-3 overflow-y-auto pr-2">
+          <div className="flex-1 space-y-3 overflow-y-auto pr-1 sm:pr-2">
             {players.map(player => (
-              <motion.div
+              <motion.button
                 layout="position"
                 key={player.id}
+                type="button"
                 onClick={() => togglePlayerSelection(player.id)}
+                aria-pressed={selectedPlayers.has(player.id)}
                 className={`flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all ${selectedPlayers.has(player.id)
                   ? 'bg-red-600/10 border-red-600'
                   : 'bg-slate-900/50 border-slate-800 hover:border-slate-700'
@@ -203,15 +205,16 @@ export const TickTackBoomGame: React.FC<{
                   </div>
                   <span className={`font-bold text-lg ${selectedPlayers.has(player.id) ? 'text-white' : 'text-slate-300'}`}>{player.name}</span>
                 </div>
-              </motion.div>
+              </motion.button>
             ))}
           </div>
 
           <footer className="py-6 space-y-3">
             {selectedPlayers.size >= 2 ? (
               <button
+                type="button"
                 onClick={initializeMatch}
-                className="w-full bg-white text-slate-950 font-black py-5 rounded-3xl text-xl flex items-center justify-center space-x-3 active:scale-95 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+                className="w-full ui-btn-light py-5 rounded-3xl text-xl flex items-center justify-center space-x-3 shadow-[0_0_30px_rgba(255,255,255,0.1)]"
               >
                 <Play fill="currentColor" />
                 <span>ΕΤΟΙΜΟΙ</span>
@@ -222,8 +225,9 @@ export const TickTackBoomGame: React.FC<{
               </p>
             )}
             <button
+              type="button"
               onClick={handleBackToHub}
-              className="w-full text-slate-500 font-bold py-3 hover:text-white transition-colors text-sm uppercase tracking-widest"
+              className="ui-muted-action"
             >
               ← Back to Hub
             </button>
@@ -260,14 +264,16 @@ export const TickTackBoomGame: React.FC<{
 
         <div className="w-full max-w-xs space-y-4">
           <button
+            type="button"
             onClick={startRound}
-            className="w-full bg-red-600 text-white font-black py-6 rounded-3xl text-2xl shadow-[0_0_50px_rgba(220,38,38,0.3)] active:scale-95 transition-all"
+            className="w-full ui-btn-danger-lg py-6 text-2xl shadow-[0_0_50px_rgba(220,38,38,0.3)]"
           >
             ΕΚΚΙΝΗΣΗ
           </button>
           <button
+            type="button"
             onClick={() => setIsSetup(true)}
-            className="text-slate-500 font-bold hover:text-white transition-colors flex items-center justify-center space-x-2 w-full"
+            className="ui-muted-link w-full font-bold flex items-center justify-center space-x-2"
           >
             <span className="text-sm uppercase">ΑΛΛΑΓΗ SETUP</span>
           </button>
@@ -282,7 +288,7 @@ export const TickTackBoomGame: React.FC<{
         key="complete"
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex-1 flex flex-col p-6 max-w-md mx-auto w-full"
+        className="flex-1 flex flex-col p-4 sm:p-6 max-w-md mx-auto w-full"
       >
         <header className="py-8 text-center">
           <h1 className="text-4xl font-black text-red-600 tracking-tighter uppercase italic">Tick Tack Boom</h1>
@@ -290,7 +296,7 @@ export const TickTackBoomGame: React.FC<{
         </header>
 
         <div className="bg-slate-900/50 border border-slate-800 rounded-3xl p-5 space-y-3">
-          <div className="text-xs uppercase tracking-widest text-slate-500">Match Standings</div>
+          <div className="ui-kicker">Match Standings</div>
           {sortedMatchPlayers.map((player, index) => (
             <div key={player.id} className="flex items-center justify-between rounded-2xl bg-slate-950/60 border border-slate-800 px-4 py-3">
               <div className="flex items-center gap-3 min-w-0">
@@ -305,20 +311,23 @@ export const TickTackBoomGame: React.FC<{
 
         <div className="mt-6 space-y-3">
           <button
+            type="button"
             onClick={initializeMatch}
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-3xl text-xl transition-all active:scale-95"
+            className="ui-btn-danger-lg"
           >
             PLAY AGAIN
           </button>
           <button
+            type="button"
             onClick={() => setIsSetup(true)}
-            className="w-full text-slate-500 font-bold py-3 hover:text-white transition-colors text-sm uppercase tracking-widest"
+            className="ui-muted-action"
           >
             New Match Setup
           </button>
           <button
+            type="button"
             onClick={handleBackToHub}
-            className="w-full text-slate-500 font-bold py-3 hover:text-white transition-colors text-sm uppercase tracking-widest"
+            className="ui-muted-action"
           >
             Back to Hub
           </button>
@@ -338,8 +347,10 @@ export const TickTackBoomGame: React.FC<{
         className="flex-1 flex flex-col bg-red-950/20 relative"
       >
         <button
+          type="button"
           onClick={handleBackToHub}
-          className="absolute top-4 right-4 text-slate-500 hover:text-white p-2"
+          aria-label="Exit to hub"
+          className="absolute top-4 right-4 text-slate-500 hover:text-white p-2.5"
         >
           <X size={24} />
         </button>
@@ -384,7 +395,7 @@ export const TickTackBoomGame: React.FC<{
           </div>
         </div>
 
-        <div className="p-8 text-center italic text-slate-500 font-bold animate-pulse text-sm">
+        <div className="p-6 sm:p-8 text-center italic text-slate-500 font-bold animate-pulse text-sm">
           ΠΕΣ ΤΗ ΛΕΞΗ ΚΑΙ ΔΩΣΕ ΤΗ ΒΟΜΒΑ!
         </div>
       </motion.div>
@@ -398,7 +409,7 @@ export const TickTackBoomGame: React.FC<{
         key="exploded"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="flex-1 flex flex-col p-6 items-center"
+        className="flex-1 flex flex-col p-4 sm:p-6 items-center"
       >
         <motion.div
           initial={{ scale: 0, rotate: -20 }}
@@ -414,6 +425,7 @@ export const TickTackBoomGame: React.FC<{
           {players.map(player => (
             <button
               key={player.id}
+              type="button"
               onClick={() => completeRound(player.id)}
               className="p-6 rounded-3xl bg-slate-900 border-2 border-slate-800 active:bg-white active:text-slate-950 transition-all text-center flex flex-col items-center justify-center space-y-2 group"
             >
@@ -425,14 +437,16 @@ export const TickTackBoomGame: React.FC<{
 
         <div className="space-y-4">
           <button
+            type="button"
             onClick={() => completeRound()}
-            className="w-full bg-white text-slate-950 font-black py-4 rounded-2xl text-lg"
+            className="w-full ui-btn-light py-4 rounded-2xl text-lg"
           >
             Continue
           </button>
           <button
+            type="button"
             onClick={handleBackToHub}
-            className="w-full text-slate-500 font-bold py-3 hover:text-white transition-colors text-sm uppercase tracking-widest"
+            className="ui-muted-action"
           >
             Exit to Hub
           </button>

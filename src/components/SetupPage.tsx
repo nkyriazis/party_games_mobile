@@ -95,6 +95,11 @@ export const SetupPage: React.FC<{
 
       setCameraError(null);
 
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setCameraError('Camera is not supported on this device/browser.');
+        return;
+      }
+
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: cameraFacing },
@@ -113,6 +118,11 @@ export const SetupPage: React.FC<{
 
     const toggleCameraFacing = async () => {
       if (!streamRef.current) {
+        return;
+      }
+
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setCameraError('Camera is not supported on this device/browser.');
         return;
       }
 
@@ -140,6 +150,11 @@ export const SetupPage: React.FC<{
     const capturePhoto = useCallback(() => {
       const video = videoRef.current;
       if (!video || !streamRef.current) {
+        return;
+      }
+
+      if (!video.videoWidth || !video.videoHeight) {
+        setCameraError('Camera is not ready yet. Please try again.');
         return;
       }
 
@@ -262,7 +277,7 @@ export const SetupPage: React.FC<{
           <p className="text-slate-500 font-bold text-xs mt-2 uppercase tracking-widest">Configure your party</p>
         </header>
 
-        <div className="flex-1 overflow-y-auto pr-2 space-y-4">
+        <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-4">
           <section className="space-y-4">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center space-x-2">
@@ -272,7 +287,7 @@ export const SetupPage: React.FC<{
               <span className="text-xs text-slate-600">{players.length} players</span>
             </div>
 
-            <div className="bg-slate-900/30 rounded-2xl border border-slate-800 p-4 space-y-4">
+            <div className="ui-panel-soft space-y-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h3 className="text-sm font-black uppercase tracking-widest text-slate-300">
@@ -284,6 +299,7 @@ export const SetupPage: React.FC<{
                 </div>
                 {editingPlayer && (
                   <button
+                    type="button"
                     onClick={() => {
                       resetPlayerForm();
                       closeCamera();
@@ -295,7 +311,7 @@ export const SetupPage: React.FC<{
                 )}
               </div>
 
-              <div className="flex space-x-2">
+              <div className="grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_auto_auto] gap-2">
                 <input
                   type="text"
                   value={playerDraftName}
@@ -305,11 +321,11 @@ export const SetupPage: React.FC<{
                   }}
                   onKeyDown={(e) => e.key === 'Enter' && handleSavePlayer()}
                   placeholder="Player name..."
-                  className={`flex-1 bg-slate-950 border-2 rounded-2xl px-4 py-3 focus:border-red-600 outline-none transition-all ${playerNameError ? 'border-red-500' : 'border-slate-800'}`}
+                  className={`min-w-0 bg-slate-950 border-2 rounded-2xl px-4 py-3 focus:border-red-600 outline-none transition-all ${playerNameError ? 'border-red-500' : 'border-slate-800'}`}
                 />
                 <button
                   onClick={handleSavePlayer}
-                  className="bg-red-600 px-4 rounded-2xl active:scale-90 transition-transform disabled:opacity-50 disabled:cursor-not-allowed font-bold text-sm min-w-20"
+                  className="w-full sm:w-auto bg-red-600 px-4 rounded-2xl active:scale-90 transition-transform disabled:opacity-50 disabled:cursor-not-allowed font-bold text-sm min-h-[52px] sm:min-w-20"
                   disabled={!playerDraftName.trim() || !!playerNameError}
                   title={editingPlayer ? 'Save player' : 'Add player'}
                 >
@@ -317,10 +333,12 @@ export const SetupPage: React.FC<{
                 </button>
                 <button
                   onClick={toggleCamera}
+                  type="button"
+                  aria-label={isCameraOpen ? 'Close camera' : 'Open camera'}
                   className={`p-4 rounded-2xl active:scale-90 transition-transform border-2 ${isCameraOpen
                     ? 'bg-red-600 border-red-700 text-white'
                     : 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white hover:border-slate-600'
-                    }`}
+                    } w-full sm:w-auto min-h-[52px] p-3 sm:p-4`}
                   title="Open camera to capture avatar"
                 >
                   <Camera size={20} />
@@ -360,7 +378,7 @@ export const SetupPage: React.FC<{
               animate={{ height: isCameraOpen ? 'auto' : 0, opacity: isCameraOpen ? 1 : 0 }}
               className="overflow-hidden"
             >
-              <div className="bg-slate-900/50 rounded-2xl border border-slate-800 p-4 space-y-4 mb-0">
+              <div className="ui-panel space-y-4 mb-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <Camera className="text-red-500" size={18} />
@@ -403,8 +421,9 @@ export const SetupPage: React.FC<{
                       )}
                     </div>
 
-                    <div className="flex space-x-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <button
+                        type="button"
                         onClick={toggleCameraFacing}
                         className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-xl transition-colors flex items-center justify-center space-x-2 disabled:opacity-50"
                         disabled={!streamRef.current}
@@ -415,6 +434,7 @@ export const SetupPage: React.FC<{
                         </span>
                       </button>
                       <button
+                        type="button"
                         onClick={capturePhoto}
                         className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl transition-colors flex items-center justify-center space-x-2 disabled:opacity-50"
                         disabled={!streamRef.current}
@@ -428,7 +448,7 @@ export const SetupPage: React.FC<{
               </div>
             </motion.div>
 
-            <div className="bg-slate-900/50 rounded-2xl border border-slate-800 p-4 space-y-3">
+            <div className="ui-panel space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-black uppercase tracking-widest text-slate-500">Player List</h3>
                 <span className="text-xs px-2 py-1 rounded-full bg-slate-700/30 text-slate-400">
@@ -463,14 +483,18 @@ export const SetupPage: React.FC<{
                       </div>
                       <div className="flex items-center space-x-1 flex-shrink-0">
                         <button
+                          type="button"
                           onClick={() => handleEditPlayer(player.id)}
+                          aria-label={`Edit player ${player.name}`}
                           className="text-slate-500 hover:text-white p-2 transition-colors"
                           title="Edit player"
                         >
                           <Edit size={16} />
                         </button>
                         <button
+                          type="button"
                           onClick={() => handleRemovePlayer(player.id)}
+                          aria-label={`Delete player ${player.name}`}
                           className="text-slate-500 hover:text-red-500 p-2 transition-colors"
                           title="Delete player"
                         >
@@ -497,7 +521,7 @@ export const SetupPage: React.FC<{
               <span className="text-xs text-slate-600">{teams.length} teams</span>
             </div>
 
-            <div className="bg-slate-900/30 rounded-2xl border border-slate-800 p-4 space-y-4">
+            <div className="ui-panel-soft space-y-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h3 className="text-sm font-black uppercase tracking-widest text-slate-300">
@@ -509,6 +533,7 @@ export const SetupPage: React.FC<{
                 </div>
                 {editingTeam && (
                   <button
+                    type="button"
                     onClick={resetTeamForm}
                     className="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-xl transition-colors"
                   >
@@ -517,18 +542,19 @@ export const SetupPage: React.FC<{
                 )}
               </div>
 
-              <div className="flex space-x-2">
+              <div className="grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_auto] gap-2">
                 <input
                   type="text"
                   value={teamDraftName}
                   onChange={(e) => setTeamDraftName(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSaveTeam()}
                   placeholder="Team name..."
-                  className="flex-1 bg-slate-950 border-2 border-slate-700 rounded-xl px-3 py-2 focus:border-red-600 outline-none transition-all text-sm"
+                  className="min-w-0 bg-slate-950 border-2 border-slate-700 rounded-xl px-3 py-2 focus:border-red-600 outline-none transition-all text-sm"
                 />
                 <button
+                  type="button"
                   onClick={handleSaveTeam}
-                  className="bg-red-600 px-4 rounded-xl active:scale-90 transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center font-bold text-sm min-w-20"
+                  className="w-full sm:w-auto bg-red-600 px-4 rounded-xl active:scale-90 transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center font-bold text-sm min-h-[44px] sm:min-w-20"
                   disabled={!teamDraftName.trim()}
                   title={editingTeam ? 'Save team' : 'Add team'}
                 >
@@ -583,7 +609,7 @@ export const SetupPage: React.FC<{
               )}
             </div>
 
-            <div className="bg-slate-900/50 rounded-2xl border border-slate-800 p-4 space-y-3">
+            <div className="ui-panel space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-black uppercase tracking-widest text-slate-500">Current Teams</h3>
                 <span className="text-xs px-2 py-1 rounded-full bg-slate-700/30 text-slate-400">
@@ -619,15 +645,19 @@ export const SetupPage: React.FC<{
                           </div>
                           <div className="flex items-center space-x-2">
                             <button
+                              type="button"
                               onClick={() => handleEditTeam(team.id)}
-                              className="text-slate-500 hover:text-red-500 p-1.5"
+                              aria-label={`Edit team ${team.name}`}
+                              className="text-slate-500 hover:text-red-500 p-2.5"
                               title="Edit team"
                             >
                               <Edit size={14} />
                             </button>
                             <button
+                              type="button"
                               onClick={() => handleRemoveTeam(team.id)}
-                              className="text-slate-500 hover:text-red-500 p-1.5"
+                              aria-label={`Remove team ${team.name}`}
+                              className="text-slate-500 hover:text-red-500 p-2.5"
                               title="Remove team"
                             >
                               <X size={14} />
@@ -661,7 +691,7 @@ export const SetupPage: React.FC<{
             onClick={handleComplete}
             disabled={!hasPlayers}
             className={`w-full py-4 rounded-2xl font-black text-xl transition-all flex items-center justify-center space-x-2 ${hasPlayers
-              ? 'bg-white text-slate-950 hover:bg-slate-100 active:scale-95'
+              ? 'ui-btn-light'
               : 'bg-slate-800 text-slate-500 cursor-not-allowed'
               }`}
           >

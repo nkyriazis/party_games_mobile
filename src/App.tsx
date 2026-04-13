@@ -105,12 +105,14 @@ function AppContent() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="flex-1 flex flex-col p-6 max-w-md mx-auto w-full"
+            className="flex-1 flex flex-col p-4 sm:p-6 max-w-md mx-auto w-full"
           >
             <header className="py-8 text-center relative">
               <button
+                type="button"
                 onClick={toggleFullscreen}
-                className="absolute right-0 top-8 p-2 text-slate-500 hover:text-white transition-colors"
+                aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+                className="absolute right-0 top-8 p-3 ui-muted-link"
                 title="Fullscreen"
               >
                 {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
@@ -119,7 +121,7 @@ function AppContent() {
               <p className="text-slate-500 font-bold text-xs mt-2 uppercase tracking-widest">Multi-Game Edition</p>
             </header>
 
-            <div className="flex-1 space-y-8 overflow-y-auto pr-2">
+            <div className="flex-1 space-y-8 overflow-y-auto pr-1 sm:pr-2">
               <section className="space-y-4">
                 <div className="flex items-center space-x-2 mb-4">
                   <Users className="text-red-500" size={20} />
@@ -133,14 +135,19 @@ function AppContent() {
                       <motion.div
                         layout="position"
                         key={player.id}
-                        className="flex items-center justify-between bg-slate-900/50 p-4 rounded-2xl border border-slate-800"
+                        className="flex items-center justify-between ui-card p-4"
                       >
-                        <div className="flex items-center space-x-3">
+                        <div className="flex items-center space-x-3 min-w-0">
                           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: player.color }} />
-                          <span className="font-bold text-lg">{player.name}</span>
-                          <span className="text-xs text-slate-500">({team?.name || 'No team'})</span>
+                          <span className="font-bold text-lg truncate">{player.name}</span>
+                          <span className="text-xs text-slate-500 truncate">({team?.name || 'No team'})</span>
                         </div>
-                        <button onClick={() => removePlayer(player.id)} className="text-slate-600 hover:text-red-500 p-2">
+                        <button
+                          type="button"
+                          aria-label={`Remove player ${player.name}`}
+                          onClick={() => removePlayer(player.id)}
+                          className="text-slate-600 hover:text-red-500 transition-colors p-2.5"
+                        >
                           <X size={18} />
                         </button>
                       </motion.div>
@@ -156,6 +163,7 @@ function AppContent() {
                 </div>
                 <div className="grid grid-cols-1 gap-4">
                   <button
+                    type="button"
                     onClick={() => setCurrentGame('tick-tack-boom')}
                     className="group relative overflow-hidden p-6 rounded-3xl bg-slate-900 border-2 border-slate-800 hover:border-red-600 transition-all text-left"
                   >
@@ -174,6 +182,7 @@ function AppContent() {
                   </button>
 
                   <button
+                    type="button"
                     onClick={() => setCurrentGame('taboo')}
                     className="group relative overflow-hidden p-6 rounded-3xl bg-slate-900 border-2 border-slate-800 hover:border-red-600 transition-all text-left"
                   >
@@ -198,13 +207,14 @@ function AppContent() {
                   <Users className="text-slate-500" size={20} />
                   <h2 className="text-sm font-black uppercase tracking-widest text-slate-500">Setup Status</h2>
                 </div>
-                <div className="bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
+                <div className="ui-card p-4">
                   <p className="text-sm text-slate-400 mb-4">
                     {isSetupComplete
                       ? 'Setup complete! You have 2+ players ready to play.'
                       : 'Please complete setup: create at least 2 players.'}
                   </p>
                   <button
+                    type="button"
                     onClick={() => setCurrentGame('setup')}
                     className="w-full py-3 bg-slate-800 hover:bg-slate-700 rounded-xl font-bold transition-colors text-sm"
                   >
@@ -263,8 +273,11 @@ function Scoreboard({ players, teams, onReset }: { players: Player[], teams: Tea
   return (
     <>
       <button
+        type="button"
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 bg-slate-800 p-4 rounded-full shadow-2xl border border-slate-700 active:scale-90 transition-all z-40"
+        aria-label="Open scoreboard"
+        className="fixed right-6 bg-slate-800 p-4 rounded-full shadow-2xl border border-slate-700 active:scale-90 transition-all z-40"
+        style={{ bottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))' }}
       >
         <Trophy size={24} className="text-yellow-500" />
       </button>
@@ -275,24 +288,24 @@ function Scoreboard({ players, teams, onReset }: { players: Player[], teams: Tea
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex flex-col p-8"
+            className="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex flex-col p-4 sm:p-8 overflow-y-auto"
           >
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-3xl font-black italic tracking-tight">HALL OF SHAME</h2>
-              <button onClick={() => setIsOpen(false)} className="p-2"><X /></button>
+              <button type="button" aria-label="Close scoreboard" onClick={() => setIsOpen(false)} className="p-2.5"><X /></button>
             </div>
 
             {/* Team Scores */}
             {teams.length > 0 && (
               <section className="mb-8">
-                <h3 className="text-sm font-black uppercase tracking-widest text-slate-500 mb-4">Team Standings</h3>
+                <h3 className="ui-kicker font-black mb-4">Team Standings</h3>
                 <div className="space-y-2">
                   {sortedTeams.map((team, idx) => (
                     <div key={team.id} className="flex items-center justify-between bg-slate-900 p-4 rounded-2xl border border-slate-800">
-                      <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-3 min-w-0">
                         <span className="text-slate-600 font-black text-xl">{idx + 1}</span>
                         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: team.color }} />
-                        <span className="font-bold text-lg">{team.name}</span>
+                        <span className="font-bold text-lg truncate">{team.name}</span>
                       </div>
                       <div className="bg-red-600/20 text-red-500 px-4 py-1 rounded-full font-black">
                         {team.score} PTS
@@ -305,17 +318,17 @@ function Scoreboard({ players, teams, onReset }: { players: Player[], teams: Tea
 
             {/* Player Scores */}
             <section>
-              <h3 className="text-sm font-black uppercase tracking-widest text-slate-500 mb-4">Individual Standings</h3>
+              <h3 className="ui-kicker font-black mb-4">Individual Standings</h3>
               <div className="space-y-2">
                 {sortedPlayers.map((player, idx) => {
                   const team = teams.find((entry) => entry.playerIds.includes(player.id));
                   return (
                     <div key={player.id} className="flex items-center justify-between bg-slate-900 p-4 rounded-2xl border border-slate-800">
-                      <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-3 min-w-0">
                         <span className="text-slate-600 font-black text-xl">{idx + 1}</span>
                         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: player.color }} />
-                        <span className="font-bold text-xl">{player.name}</span>
-                        {team && <span className="text-xs text-slate-500">({team.name})</span>}
+                        <span className="font-bold text-xl truncate">{player.name}</span>
+                        {team && <span className="text-xs text-slate-500 truncate">({team.name})</span>}
                       </div>
                       <div className="bg-red-600/20 text-red-500 px-4 py-1 rounded-full font-black">
                         {player.score} PTS
@@ -327,6 +340,7 @@ function Scoreboard({ players, teams, onReset }: { players: Player[], teams: Tea
             </section>
 
             <button
+              type="button"
               onClick={() => { if (confirm('Είστε σίγουροι;')) { onReset(); setIsOpen(false); } }}
               className="mt-8 flex items-center justify-center space-x-2 text-slate-600 font-bold hover:text-red-500 transition-colors"
             >

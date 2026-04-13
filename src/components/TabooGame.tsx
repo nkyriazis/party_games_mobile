@@ -181,7 +181,7 @@ export const TabooGame: React.FC<{
 
   if (populatedTeams.length < 2) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-slate-950 text-white">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 bg-slate-950 text-white">
         <h1 className="text-4xl font-black mb-8 text-red-500">TABOO</h1>
         <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-6 max-w-md text-center mb-8">
           <h2 className="text-2xl font-black text-amber-500 mb-4">Two Teams Required</h2>
@@ -193,14 +193,16 @@ export const TabooGame: React.FC<{
           </p>
         </div>
         <button
+          type="button"
           onClick={onBack}
           className="px-8 py-4 bg-white text-slate-950 font-black rounded-2xl text-xl hover:bg-slate-100 active:scale-95 transition-all"
         >
           Back to Hub
         </button>
         <button
+          type="button"
           onClick={() => setCurrentGame('setup')}
-          className="mt-4 text-slate-500 hover:text-white transition-colors text-sm"
+          className="mt-4 ui-muted-link-sm"
         >
           Go to Setup →
         </button>
@@ -210,30 +212,30 @@ export const TabooGame: React.FC<{
 
   if (roundState === 'select') {
     return (
-      <div className="flex flex-col min-h-screen p-6 bg-slate-950 text-white max-w-md mx-auto w-full">
+      <div className="flex flex-col min-h-screen p-4 sm:p-6 bg-slate-950 text-white max-w-md mx-auto w-full">
         <header className="py-6 text-center">
           <h1 className="text-4xl font-black mb-2 text-red-500">TABOO</h1>
           <p className="text-sm text-slate-400">Pick the two teams for this matchup.</p>
         </header>
 
-        <div className="mb-6 bg-slate-900/40 border border-slate-800 rounded-2xl p-4 space-y-4">
+        <div className="mb-6 ui-panel-soft space-y-4">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <div className="text-xs uppercase tracking-widest text-slate-500">Rounds</div>
+                <div className="ui-kicker">Rounds</div>
               <div className="text-3xl font-black text-white mt-2">{totalRounds}</div>
             </div>
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => setTotalRounds((prev) => Math.max(1, prev - 1))}
-                className="h-11 w-11 rounded-2xl bg-slate-800 hover:bg-slate-700 text-xl font-black transition-colors"
+                className="ui-btn-square"
               >
                 -
               </button>
               <button
                 type="button"
                 onClick={() => setTotalRounds((prev) => Math.min(20, prev + 1))}
-                className="h-11 w-11 rounded-2xl bg-slate-800 hover:bg-slate-700 text-xl font-black transition-colors"
+                className="ui-btn-square"
               >
                 +
               </button>
@@ -257,7 +259,7 @@ export const TabooGame: React.FC<{
           </div>
         </div>
 
-        <div className="flex-1 space-y-3 overflow-y-auto pr-2">
+        <div className="flex-1 space-y-3 overflow-y-auto pr-1 sm:pr-2">
           {populatedTeams.map((team) => {
             const isSelected = selectedTeamIds.includes(team.id);
             const playerNames = team.playerIds
@@ -275,12 +277,12 @@ export const TabooGame: React.FC<{
                   }`}
               >
                 <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="text-xs uppercase tracking-widest text-slate-500 mb-2">Team</div>
-                    <div className="text-2xl font-black" style={{ color: team.color }}>
+                  <div className="min-w-0">
+                      <div className="ui-kicker mb-2">Team</div>
+                    <div className="text-2xl font-black truncate" style={{ color: team.color }}>
                       {team.name}
                     </div>
-                    <div className="text-sm text-slate-500 mt-2">
+                    <div className="text-sm text-slate-500 mt-2 truncate">
                       {playerNames.join(', ')}
                     </div>
                   </div>
@@ -296,15 +298,17 @@ export const TabooGame: React.FC<{
             {selectedTeamIds.length === 2 ? 'Two teams selected.' : `Pick ${2 - selectedTeamIds.length} more team(s).`}
           </p>
           <button
+            type="button"
             onClick={handleConfirmTeams}
             disabled={selectedTeams.length !== 2}
-            className="w-full bg-red-600 disabled:bg-slate-800 disabled:text-slate-500 hover:bg-red-700 text-white font-black py-4 rounded-3xl text-xl transition-all active:scale-95 disabled:active:scale-100"
+            className="ui-btn-danger-lg disabled:bg-slate-800 disabled:text-slate-500 disabled:active:scale-100"
           >
             CONTINUE
           </button>
           <button
+            type="button"
             onClick={onBack}
-            className="w-full text-slate-500 hover:text-white transition-colors text-sm"
+            className="w-full ui-muted-link-sm"
           >
             ← Back to Hub
           </button>
@@ -315,26 +319,26 @@ export const TabooGame: React.FC<{
 
   if (roundState === 'ready') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-slate-950 text-white">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 bg-slate-950 text-white">
         <h1 className="text-4xl font-black mb-8 text-red-500">TABOO</h1>
         <div className="text-sm text-slate-500 mb-6">Round {currentRound} of {totalRounds}</div>
         <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 w-full max-w-md mb-8 space-y-6">
           <div>
-            <div className="text-xs uppercase tracking-widest text-slate-500 mb-2">Describing Team</div>
+            <div className="ui-kicker mb-2">Describing Team</div>
             <div className="text-2xl font-black" style={{ color: roundInfo.describingTeam?.color }}>
               {roundInfo.describingTeam?.name}
             </div>
           </div>
 
           <div>
-            <div className="text-xs uppercase tracking-widest text-slate-500 mb-2">Describing Player</div>
+            <div className="ui-kicker mb-2">Describing Player</div>
             <div className="text-3xl font-black text-white mt-3">
               {roundInfo.describingPlayer?.name}
             </div>
           </div>
 
           <div>
-            <div className="text-xs uppercase tracking-widest text-slate-500 mb-2">Supervising Team</div>
+            <div className="ui-kicker mb-2">Supervising Team</div>
             <div className="text-2xl font-black" style={{ color: roundInfo.supervisingTeam?.color }}>
               {roundInfo.supervisingTeam?.name}
             </div>
@@ -343,22 +347,25 @@ export const TabooGame: React.FC<{
 
         <div className="space-y-3 w-full max-w-md">
           <button
+            type="button"
             onClick={() => setRoundState('game')}
-            className="w-full px-12 py-4 bg-red-600 hover:bg-red-700 text-white text-2xl font-black rounded-full shadow-xl transition-all active:scale-95"
+            className="w-full px-12 ui-btn-danger-lg text-2xl rounded-full shadow-xl"
           >
             START ROUND
           </button>
 
           <button
+            type="button"
             onClick={handleChangeTeams}
-            className="w-full text-slate-500 hover:text-white transition-colors text-sm"
+            className="w-full ui-muted-link-sm"
           >
             Change Teams
           </button>
 
           <button
+            type="button"
             onClick={onBack}
-            className="w-full text-slate-500 hover:text-white transition-colors"
+            className="w-full ui-muted-link"
           >
             ← Back to Hub
           </button>
@@ -369,14 +376,14 @@ export const TabooGame: React.FC<{
 
   if (isMatchComplete) {
     return (
-      <div className="flex flex-col min-h-screen p-6 bg-slate-950 text-white max-w-md mx-auto w-full">
+      <div className="flex flex-col min-h-screen p-4 sm:p-6 bg-slate-950 text-white max-w-md mx-auto w-full">
         <header className="py-8 text-center">
           <h1 className="text-4xl font-black text-red-500">TABOO</h1>
           <p className="text-slate-400 mt-3">Match complete after {totalRounds} rounds.</p>
         </header>
 
         <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-5 space-y-3">
-          <div className="text-xs uppercase tracking-widest text-slate-500">Final Team Scores</div>
+          <div className="ui-kicker">Final Team Scores</div>
           {sortedMatchTeams.map((team, index) => (
             <div key={team.id} className="flex items-center justify-between rounded-2xl bg-slate-950/60 border border-slate-800 px-4 py-3">
               <div className="flex items-center gap-3 min-w-0">
@@ -393,20 +400,23 @@ export const TabooGame: React.FC<{
 
         <div className="mt-6 space-y-3">
           <button
+            type="button"
             onClick={handleConfirmTeams}
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-3xl text-xl transition-all active:scale-95"
+            className="ui-btn-danger-lg"
           >
             PLAY AGAIN
           </button>
           <button
+            type="button"
             onClick={handleChangeTeams}
-            className="w-full text-slate-500 hover:text-white transition-colors text-sm"
+            className="w-full ui-muted-link-sm"
           >
             New Match Setup
           </button>
           <button
+            type="button"
             onClick={onBack}
-            className="w-full text-slate-500 hover:text-white transition-colors text-sm"
+            className="w-full ui-muted-link-sm"
           >
             ← Back to Hub
           </button>
@@ -421,19 +431,19 @@ export const TabooGame: React.FC<{
         <div className="absolute top-4 left-4 right-4 flex justify-center">
           <div className="w-full max-w-md bg-slate-900/90 backdrop-blur px-5 py-4 rounded-3xl border border-slate-700 shadow-lg shadow-slate-950/30 space-y-3">
             <div className="flex items-baseline justify-between gap-4">
-              <span className="text-xs uppercase tracking-widest text-slate-500">Describing Team</span>
+              <span className="ui-kicker">Describing Team</span>
               <span className="text-xl font-black" style={{ color: roundInfo.describingTeam?.color }}>
                 {roundInfo.describingTeam?.name}
               </span>
             </div>
             <div className="flex items-baseline justify-between gap-4 border-t border-slate-800 pt-3">
-              <span className="text-xs uppercase tracking-widest text-slate-500">Describing Player</span>
+              <span className="ui-kicker">Describing Player</span>
               <span className="text-xl font-black text-white">
                 {roundInfo.describingPlayer?.name}
               </span>
             </div>
             <div className="flex items-baseline justify-between gap-4 border-t border-slate-800 pt-3">
-              <span className="text-xs uppercase tracking-widest text-slate-500">Supervising Team</span>
+              <span className="ui-kicker">Supervising Team</span>
               <span className="text-xl font-black" style={{ color: roundInfo.supervisingTeam?.color }}>
                 {roundInfo.supervisingTeam?.name}
               </span>
@@ -467,6 +477,7 @@ export const TabooGame: React.FC<{
             <h2 className="text-5xl font-black text-red-500 mb-4">TIME'S UP!</h2>
             <p className="text-xl text-slate-400 mb-8">Round ended for {roundInfo.describingPlayer?.name}</p>
             <button
+              type="button"
               onClick={handleNextRound}
               className="px-8 py-3 bg-slate-700 hover:bg-slate-600 rounded-xl font-bold transition-colors"
             >
@@ -476,8 +487,10 @@ export const TabooGame: React.FC<{
         )}
 
         <button
+          type="button"
           onClick={onBack}
-          className="fixed bottom-8 left-8 text-slate-600 hover:text-slate-400 transition-colors"
+            className="fixed left-4 text-slate-600 hover:text-slate-400 transition-colors bg-slate-900/70 backdrop-blur px-4 py-2 rounded-xl border border-slate-800"
+          style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
         >
           ← Exit Game
         </button>
