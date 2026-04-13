@@ -15,6 +15,7 @@ export const TickTackBoomGame: React.FC<{
 }> = ({ players, incrementScore, onBack }) => {
   const {
     timeLeft,
+    roundDuration,
     isTicking,
     currentGram,
     currentDieMode,
@@ -34,15 +35,18 @@ export const TickTackBoomGame: React.FC<{
   // Audio control loop
   const lastTickRef = useRef<number>(0);
   useEffect(() => {
-    if (isTicking && timeLeft !== null) {
-      const tickInterval = Math.max(0.1, (timeLeft / 90) * 1.0);
+    if (isTicking && timeLeft !== null && roundDuration !== null) {
+      const progress = Math.min(1, Math.max(0, 1 - timeLeft / roundDuration));
+      const slowestTickInterval = 0.9;
+      const fastestTickInterval = 0.12;
+      const tickInterval = slowestTickInterval - (slowestTickInterval - fastestTickInterval) * progress;
       const now = Date.now();
       if (now - lastTickRef.current > tickInterval * 1000) {
-        soundManager.playTick(440 + (90 - timeLeft) * 5);
+        soundManager.playTick(440 + progress * 250);
         lastTickRef.current = now;
       }
     }
-  }, [isTicking, timeLeft]);
+  }, [isTicking, timeLeft, roundDuration]);
 
   useEffect(() => {
     if (gameState === GameState.EXPLODED) {
@@ -111,6 +115,12 @@ export const TickTackBoomGame: React.FC<{
     onBack();
   };
 
+  const roundProgress =
+    timeLeft !== null && roundDuration !== null
+      ? Math.min(1, Math.max(0, 1 - timeLeft / roundDuration))
+      : 0;
+  const bombPulseDuration = 2.2 - 2.0 * roundProgress;
+
   // Setup screen - player selection with checkboxes
   if (isSetup) {
     return (
@@ -178,8 +188,8 @@ export const TickTackBoomGame: React.FC<{
                 key={player.id}
                 onClick={() => togglePlayerSelection(player.id)}
                 className={`flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all ${selectedPlayers.has(player.id)
-                    ? 'bg-red-600/10 border-red-600'
-                    : 'bg-slate-900/50 border-slate-800 hover:border-slate-700'
+                  ? 'bg-red-600/10 border-red-600'
+                  : 'bg-slate-900/50 border-slate-800 hover:border-slate-700'
                   }`}
               >
                 <div className="flex items-center space-x-3">
@@ -344,7 +354,7 @@ export const TickTackBoomGame: React.FC<{
                 color: ['#1e293b', '#ef4444', '#1e293b']
               }}
               transition={{
-                duration: Math.max(0.1, (timeLeft || 1) / 30),
+                duration: Math.max(0.2, bombPulseDuration),
                 repeat: Infinity
               }}
             >

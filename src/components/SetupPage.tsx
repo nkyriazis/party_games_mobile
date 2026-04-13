@@ -22,6 +22,7 @@ export const SetupPage: React.FC<{
     const { players, addPlayer, updatePlayer, removePlayer } = usePlayers();
     const [playerDraftName, setPlayerDraftName] = useState('');
     const [playerDraftAvatar, setPlayerDraftAvatar] = useState<string | null>(null);
+    const [playerNameError, setPlayerNameError] = useState<string | null>(null);
     const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
     const [teamDraftName, setTeamDraftName] = useState('');
     const [teamDraftPlayerIds, setTeamDraftPlayerIds] = useState<string[]>([]);
@@ -41,6 +42,7 @@ export const SetupPage: React.FC<{
       setEditingPlayerId(null);
       setPlayerDraftName('');
       setPlayerDraftAvatar(null);
+      setPlayerNameError(null);
     }, []);
 
     const resetTeamForm = useCallback(() => {
@@ -160,14 +162,24 @@ export const SetupPage: React.FC<{
     }, [cameraFacing]);
 
     const handleSavePlayer = () => {
-      if (!playerDraftName.trim()) {
+      const trimmedName = playerDraftName.trim();
+      if (!trimmedName) {
+        return;
+      }
+
+      const isDuplicate = players.some(
+        (p) => p.name.toLowerCase() === trimmedName.toLowerCase() && p.id !== editingPlayerId,
+      );
+      if (isDuplicate) {
+        setPlayerNameError('A player with this name already exists');
         return;
       }
 
       if (editingPlayerId) {
-        updatePlayer(editingPlayerId, playerDraftName, playerDraftAvatar || undefined);
+        // pass null explicitly to clear avatar, undefined would keep existing
+        updatePlayer(editingPlayerId, trimmedName, playerDraftAvatar);
       } else {
-        addPlayer(playerDraftName, playerDraftAvatar || undefined);
+        addPlayer(trimmedName, playerDraftAvatar ?? undefined);
       }
 
       resetPlayerForm();
@@ -180,6 +192,8 @@ export const SetupPage: React.FC<{
         return;
       }
 
+      closeCamera();
+      setPlayerNameError(null);
       setEditingPlayerId(player.id);
       setPlayerDraftName(player.name);
       setPlayerDraftAvatar(player.avatar || null);
@@ -242,13 +256,13 @@ export const SetupPage: React.FC<{
     };
 
     return (
-      <div className="flex-1 flex flex-col p-6 max-w-md mx-auto w-full">
-        <header className="py-6 text-center relative">
+      <div className="flex-1 flex flex-col p-4 max-w-md mx-auto w-full">
+        <header className="py-3 text-center relative">
           <h1 className="text-4xl font-black text-red-600 tracking-tighter uppercase italic">Setup</h1>
           <p className="text-slate-500 font-bold text-xs mt-2 uppercase tracking-widest">Configure your party</p>
         </header>
 
-        <div className="flex-1 overflow-y-auto pr-2 space-y-6">
+        <div className="flex-1 overflow-y-auto pr-2 space-y-4">
           <section className="space-y-4">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center space-x-2">
@@ -285,15 +299,18 @@ export const SetupPage: React.FC<{
                 <input
                   type="text"
                   value={playerDraftName}
-                  onChange={(e) => setPlayerDraftName(e.target.value)}
+                  onChange={(e) => {
+                    setPlayerDraftName(e.target.value);
+                    if (playerNameError) setPlayerNameError(null);
+                  }}
                   onKeyDown={(e) => e.key === 'Enter' && handleSavePlayer()}
                   placeholder="Player name..."
-                  className="flex-1 bg-slate-950 border-2 border-slate-800 rounded-2xl px-4 py-3 focus:border-red-600 outline-none transition-all"
+                  className={`flex-1 bg-slate-950 border-2 rounded-2xl px-4 py-3 focus:border-red-600 outline-none transition-all ${playerNameError ? 'border-red-500' : 'border-slate-800'}`}
                 />
                 <button
                   onClick={handleSavePlayer}
                   className="bg-red-600 px-4 rounded-2xl active:scale-90 transition-transform disabled:opacity-50 disabled:cursor-not-allowed font-bold text-sm min-w-20"
-                  disabled={!playerDraftName.trim()}
+                  disabled={!playerDraftName.trim() || !!playerNameError}
                   title={editingPlayer ? 'Save player' : 'Add player'}
                 >
                   {editingPlayer ? 'Save' : 'Add'}
@@ -309,6 +326,10 @@ export const SetupPage: React.FC<{
                   <Camera size={20} />
                 </button>
               </div>
+
+              {playerNameError && (
+                <p className="text-xs text-red-400 -mt-2">{playerNameError}</p>
+              )}
 
               {playerDraftAvatar && (
                 <div className="bg-slate-950/50 border border-slate-700 rounded-xl p-4 flex items-center space-x-4">
@@ -334,6 +355,79 @@ export const SetupPage: React.FC<{
               )}
             </div>
 
+            <motion.div
+              initial={false}
+              animate={{ height: isCameraOpen ? 'auto' : 0, opacity: isCameraOpen ? 1 : 0 }}
+              className="overflow-hidden"
+            >
+              <div className="bg-slate-900/50 rounded-2xl border border-slate-800 p-4 space-y-4 mb-0">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Camera className="text-red-500" size={18} />
+                    <h2 className="text-sm font-black uppercase tracking-widest text-slate-400">Camera</h2>
+                  </div>
+                  <button
+                    onClick={toggleCamera}
+                    className="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1 rounded transition-colors"
+                  >
+                    Close
+                  </button>
+                </div>
+
+                {cameraError ? (
+                  <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4">
+                    <p className="text-red-400 text-sm text-center">{cameraError}</p>
+                    <button
+                      onClick={toggleCamera}
+                      className="mt-3 w-full bg-red-600 text-white py-2 rounded-xl text-sm font-bold hover:bg-red-700 transition-colors"
+                    >
+                      Retry
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="relative aspect-video bg-slate-950 rounded-xl overflow-hidden">
+                      <video
+                        ref={videoRef}
+                        autoPlay
+                        playsInline
+                        muted
+                        className="w-full h-full object-cover"
+                      />
+                      {!playerDraftAvatar && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="text-slate-600 text-xs uppercase tracking-widest text-center px-4">
+                            Position your face<br />for the avatar
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex space-x-3">
+                      <button
+                        onClick={toggleCameraFacing}
+                        className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-xl transition-colors flex items-center justify-center space-x-2 disabled:opacity-50"
+                        disabled={!streamRef.current}
+                      >
+                        <Camera size={18} className="rotate-180" />
+                        <span className="text-sm font-bold uppercase">
+                          {cameraFacing === 'user' ? 'Rear Camera' : 'Front Camera'}
+                        </span>
+                      </button>
+                      <button
+                        onClick={capturePhoto}
+                        className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl transition-colors flex items-center justify-center space-x-2 disabled:opacity-50"
+                        disabled={!streamRef.current}
+                      >
+                        <Camera size={18} />
+                        <span className="text-sm font-bold uppercase">Capture</span>
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </motion.div>
+
             <div className="bg-slate-900/50 rounded-2xl border border-slate-800 p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-black uppercase tracking-widest text-slate-500">Player List</h3>
@@ -350,37 +444,37 @@ export const SetupPage: React.FC<{
                     <motion.div
                       layout="position"
                       key={player.id}
-                      className="flex items-center justify-between bg-slate-900/50 p-4 rounded-2xl border border-slate-800 group"
+                      className="flex items-center justify-between bg-slate-900/50 p-3 rounded-2xl border border-slate-800"
                     >
-                      <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-3 min-w-0">
                         {player.avatar ? (
-                          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-slate-700 flex-shrink-0">
+                          <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-slate-700 flex-shrink-0">
                             <img src={player.avatar} alt={player.name} className="w-full h-full object-cover" />
                           </div>
                         ) : (
-                          <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border-2 border-slate-700 flex-shrink-0">
+                          <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center border-2 border-slate-700 flex-shrink-0">
                             <span className="text-sm font-bold text-slate-400">{player.name.charAt(0).toUpperCase()}</span>
                           </div>
                         )}
                         <div className="overflow-hidden">
-                          <span className="font-bold text-lg block truncate">{player.name}</span>
+                          <span className="font-bold text-base block truncate">{player.name}</span>
                           <span className="text-xs text-slate-500">{assignedTeam ? `on ${assignedTeam.name}` : 'no team'}</span>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center space-x-1 flex-shrink-0">
                         <button
                           onClick={() => handleEditPlayer(player.id)}
-                          className="text-slate-600 hover:text-white p-2"
+                          className="text-slate-500 hover:text-white p-2 transition-colors"
                           title="Edit player"
                         >
-                          <Edit size={18} />
+                          <Edit size={16} />
                         </button>
                         <button
                           onClick={() => handleRemovePlayer(player.id)}
-                          className="text-slate-600 hover:text-red-500 p-2"
+                          className="text-slate-500 hover:text-red-500 p-2 transition-colors"
                           title="Delete player"
                         >
-                          <X size={18} />
+                          <X size={16} />
                         </button>
                       </div>
                     </motion.div>
@@ -562,80 +656,7 @@ export const SetupPage: React.FC<{
 
         </div>
 
-        <motion.div
-          initial={false}
-          animate={{ height: isCameraOpen ? 'auto' : 0, opacity: isCameraOpen ? 1 : 0 }}
-          className="overflow-hidden"
-        >
-          <div className="bg-slate-900/50 rounded-2xl border border-slate-800 p-4 space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Camera className="text-red-500" size={20} />
-                <h2 className="text-sm font-black uppercase tracking-widest text-slate-400">Camera</h2>
-              </div>
-              <button
-                onClick={toggleCamera}
-                className="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1 rounded transition-colors"
-              >
-                Close
-              </button>
-            </div>
-
-            {cameraError ? (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4">
-                <p className="text-red-400 text-sm text-center">{cameraError}</p>
-                <button
-                  onClick={toggleCamera}
-                  className="mt-3 w-full bg-red-600 text-white py-2 rounded-xl text-sm font-bold hover:bg-red-700 transition-colors"
-                >
-                  Retry
-                </button>
-              </div>
-            ) : (
-              <>
-                <div className="relative aspect-video bg-slate-950 rounded-xl overflow-hidden">
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    muted
-                    className="w-full h-full object-cover"
-                  />
-                  {!playerDraftAvatar && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-slate-600 text-xs uppercase tracking-widest text-center px-4">
-                        Position your face<br />for the avatar
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex space-x-3">
-                  <button
-                    onClick={toggleCameraFacing}
-                    className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-xl transition-colors flex items-center justify-center space-x-2 disabled:opacity-50"
-                    disabled={!streamRef.current}
-                  >
-                    <Camera size={18} className="rotate-180" />
-                    <span className="text-sm font-bold uppercase">
-                      {cameraFacing === 'user' ? 'Rear Camera' : 'Front Camera'}
-                    </span>
-                  </button>
-                  <button
-                    onClick={capturePhoto}
-                    className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl transition-colors flex items-center justify-center space-x-2 disabled:opacity-50"
-                    disabled={!streamRef.current}
-                  >
-                    <Camera size={18} />
-                    <span className="text-sm font-bold uppercase">Capture</span>
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </motion.div>
-
-        <div className="mt-6 pt-6 border-t border-slate-800 space-y-4">
+        <div className="mt-4 pt-4 border-t border-slate-800 space-y-4">
           <button
             onClick={handleComplete}
             disabled={!hasPlayers}

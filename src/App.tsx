@@ -4,7 +4,7 @@ import { PlayersProvider, usePlayers, Player } from './contexts/PlayersContext';
 import { useTeams, Team } from './hooks/useTeams';
 import {
   X, Trophy, Users, Trash2, Maximize, Minimize,
-  Gamepad2, Bomb, MessageSquare, ArrowLeft
+  Gamepad2, ArrowLeft
 } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 import { StatusBar } from '@capacitor/status-bar';
@@ -161,8 +161,8 @@ function AppContent() {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className="p-3 bg-red-600 rounded-2xl text-white group-hover:scale-110 transition-transform">
-                          <Bomb size={24} />
+                        <div className="p-1 group-hover:scale-110 transition-transform">
+                          <img src="/icon-tick-tack-boom.png" alt="Tick Tack Boom" className="w-14 h-14 object-contain" />
                         </div>
                         <div className="text-left">
                           <h3 className="text-xl font-black uppercase italic">Tick Tack Boom</h3>
@@ -179,8 +179,8 @@ function AppContent() {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className="p-3 bg-blue-600 rounded-2xl text-white group-hover:scale-110 transition-transform">
-                          <MessageSquare size={24} />
+                        <div className="p-1 group-hover:scale-110 transition-transform">
+                          <img src="/icon-taboo.png" alt="Taboo" className="w-14 h-14 object-contain" />
                         </div>
                         <div className="text-left">
                           <h3 className="text-xl font-black uppercase italic">Taboo</h3>

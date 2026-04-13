@@ -10,22 +10,20 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+      includeAssets: ['icon.svg', 'mask-icon.svg'],
       manifest: {
         name: 'Tick Tack Boom Greek',
         short_name: 'TickTackBoom',
         description: 'The Greek version of the classic Tick Tack Boom board game',
-        theme_color: '#ffffff',
+        lang: 'el',
+        background_color: '#020617',
+        theme_color: '#020617',
         icons: [
           {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
+            src: 'icon.svg',
+            sizes: '1024x1024',
+            type: 'image/svg+xml',
+            purpose: 'any maskable'
           }
         ]
       }

@@ -6,7 +6,7 @@ import { gameMachine, GameState, DieMode } from './gameMachine';
 export { GameState, DieMode };
 
 export const useGame = () => {
-  const { timeLeft, isTicking, isExploded, startBomb, stopBomb, resetBomb } = useBomb();
+  const { timeLeft, roundDuration, isTicking, isExploded, startBomb, stopBomb, resetBomb } = useBomb();
 
   const machineWithActions = useMemo(() => gameMachine.provide({
     actions: {
@@ -35,6 +35,7 @@ export const useGame = () => {
   return {
     // State
     timeLeft,
+    roundDuration,
     isTicking,
     isExploded,
     currentGram: state.context.currentGram,

@@ -22,7 +22,7 @@ const COLORS = [
 interface PlayersContextType {
   players: Player[];
   addPlayer: (name: string, avatar?: string) => void;
-  updatePlayer: (id: string, name: string, avatar?: string) => void;
+  updatePlayer: (id: string, name: string, avatar?: string | null) => void;
   removePlayer: (id: string) => void;
   incrementScore: (id: string) => void;
   resetScores: () => void;
@@ -65,7 +65,7 @@ export const PlayersProvider: React.FC<{ children: React.ReactNode }> = ({ child
     ]);
   }, []);
 
-  const updatePlayer = useCallback((id: string, name: string, avatar?: string) => {
+  const updatePlayer = useCallback((id: string, name: string, avatar?: string | null) => {
     const trimmedName = name.trim();
     if (!trimmedName) return;
 
@@ -74,7 +74,8 @@ export const PlayersProvider: React.FC<{ children: React.ReactNode }> = ({ child
         ? {
           ...player,
           name: trimmedName,
-          avatar: avatar === undefined ? player.avatar : avatar,
+          // undefined = keep existing; null = clear; string = set new
+          avatar: avatar === undefined ? player.avatar : (avatar ?? undefined),
         }
         : player
     )));
@@ -108,75 +109,7 @@ export const PlayersProvider: React.FC<{ children: React.ReactNode }> = ({ child
 export const usePlayers = () => {
   const context = useContext(PlayersContext);
   if (context === undefined) {
-    // Fallback for when context is not available (e.g., during initial mount)
-    const [players, setPlayers] = useState<Player[]>(() => {
-      const saved = localStorage.getItem('tick-tack-boom-players');
-      if (saved) {
-        const parsed = JSON.parse(saved) as Player[];
-        return parsed.map(p => ({
-          ...p,
-          avatar: p.avatar,
-        }));
-      }
-      return [];
-    });
-
-    useEffect(() => {
-      localStorage.setItem('tick-tack-boom-players', JSON.stringify(players));
-    }, [players]);
-
-    const addPlayer = useCallback((name: string, avatar?: string) => {
-      if (!name.trim()) return;
-      const id = typeof crypto.randomUUID === 'function'
-        ? crypto.randomUUID()
-        : Math.random().toString(36).substring(2) + Date.now().toString(36);
-
-      setPlayers(prev => [
-        ...prev,
-        {
-          id,
-          name: name.trim(),
-          score: 0,
-          color: COLORS[prev.length % COLORS.length],
-          avatar,
-        }
-      ]);
-    }, []);
-
-    const updatePlayer = useCallback((id: string, name: string, avatar?: string) => {
-      const trimmedName = name.trim();
-      if (!trimmedName) return;
-
-      setPlayers(prev => prev.map(player => (
-        player.id === id
-          ? {
-            ...player,
-            name: trimmedName,
-            avatar: avatar === undefined ? player.avatar : avatar,
-          }
-          : player
-      )));
-    }, []);
-
-    const removePlayer = useCallback((id: string) => {
-      setPlayers(prev => prev.filter(p => p.id !== id));
-    }, []);
-
-    const updateScore = useCallback((id: string, delta: number) => {
-      setPlayers(prev => prev.map(p =>
-        p.id === id ? { ...p, score: p.score + delta } : p
-      ));
-    }, []);
-
-    const incrementScore = useCallback((id: string) => {
-      updateScore(id, 1);
-    }, [updateScore]);
-
-    const resetScores = useCallback(() => {
-      setPlayers(prev => prev.map(p => ({ ...p, score: 0 })));
-    }, []);
-
-    return { players, addPlayer, updatePlayer, removePlayer, incrementScore, resetScores };
+    throw new Error('usePlayers must be used within a PlayersProvider');
   }
   return context;
 };

@@ -69,10 +69,20 @@ export const useTeams = (players: Player[]) => {
     const validPlayerIds = new Set(players.map((player) => player.id));
 
     setTeams((prev) => {
-      const nextTeams = normalizeTeams(prev, validPlayerIds);
-      const changed = nextTeams.some((team, index) => team !== prev[index]);
+      const normalized = normalizeTeams(prev, validPlayerIds);
+      // Remove teams that became empty as a result of player removal
+      const nextTeams = normalized.filter((team) => team.playerIds.length > 0);
 
-      return changed ? nextTeams : prev;
+      const someRemoved = nextTeams.length < prev.length;
+      const someChanged = normalized.some((team, index) => team !== prev[index]);
+
+      if (!someRemoved && !someChanged) return prev;
+
+      if (someRemoved) {
+        setCurrentTeamIndex((idx) => Math.min(idx, Math.max(nextTeams.length - 1, 0)));
+      }
+
+      return nextTeams;
     });
   }, [players]);
 

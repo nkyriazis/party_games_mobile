@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 export const useBomb = () => {
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [roundDuration, setRoundDuration] = useState<number | null>(null);
   const [isTicking, setIsTicking] = useState(false);
   const [isExploded, setIsExploded] = useState(false);
   
@@ -19,6 +20,7 @@ export const useBomb = () => {
   const resetBomb = useCallback(() => {
     stopBomb();
     setTimeLeft(null);
+    setRoundDuration(null);
     setIsTicking(false);
     setIsExploded(false);
   }, [stopBomb]);
@@ -28,6 +30,7 @@ export const useBomb = () => {
     
     // Random duration between 10 and 90 seconds
     const duration = Math.floor(Math.random() * (90 - 10 + 1) + 10);
+    setRoundDuration(duration);
     setTimeLeft(duration);
     setIsTicking(true);
     
@@ -56,6 +59,7 @@ export const useBomb = () => {
 
   return {
     timeLeft,
+    roundDuration,
     isTicking,
     isExploded,
     startBomb,
