@@ -30,6 +30,7 @@ export const SetupPage: React.FC<{
     const [isCameraOpen, setIsCameraOpen] = useState(false);
     const [cameraFacing, setCameraFacing] = useState<'user' | 'environment'>('user');
     const [cameraError, setCameraError] = useState<string | null>(null);
+    const [hasCameraStream, setHasCameraStream] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
     const streamRef = useRef<MediaStream | null>(null);
 
@@ -84,6 +85,7 @@ export const SetupPage: React.FC<{
       }
 
       setIsCameraOpen(false);
+      setHasCameraStream(false);
       setCameraError(null);
     }, []);
 
@@ -109,9 +111,12 @@ export const SetupPage: React.FC<{
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
+        setHasCameraStream(true);
         setIsCameraOpen(true);
+        setCameraError(null);
       } catch (err) {
         console.error('Camera error:', err);
+        setHasCameraStream(false);
         setCameraError('Could not access camera. Please check permissions.');
       }
     };
@@ -128,6 +133,7 @@ export const SetupPage: React.FC<{
 
       streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
+      setHasCameraStream(false);
 
       const newFacing = cameraFacing === 'user' ? 'environment' : 'user';
       setCameraFacing(newFacing);
@@ -141,8 +147,11 @@ export const SetupPage: React.FC<{
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
+        setHasCameraStream(true);
+        setCameraError(null);
       } catch (err) {
         console.error('Camera switch error:', err);
+        setHasCameraStream(false);
         setCameraError('Could not switch camera.');
       }
     };
@@ -426,7 +435,7 @@ export const SetupPage: React.FC<{
                         type="button"
                         onClick={toggleCameraFacing}
                         className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-xl transition-colors flex items-center justify-center space-x-2 disabled:opacity-50"
-                        disabled={!streamRef.current}
+                        disabled={!hasCameraStream}
                       >
                         <Camera size={18} className="rotate-180" />
                         <span className="text-sm font-bold uppercase">
@@ -437,7 +446,7 @@ export const SetupPage: React.FC<{
                         type="button"
                         onClick={capturePhoto}
                         className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl transition-colors flex items-center justify-center space-x-2 disabled:opacity-50"
-                        disabled={!streamRef.current}
+                        disabled={!hasCameraStream}
                       >
                         <Camera size={18} />
                         <span className="text-sm font-bold uppercase">Capture</span>
