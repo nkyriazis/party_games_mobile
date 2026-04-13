@@ -19,7 +19,15 @@ type GameId = 'setup' | 'hub' | 'tick-tack-boom' | 'taboo';
 function AppContent() {
   const [currentGame, setCurrentGame] = useState<GameId>('setup');
   const { players, removePlayer, incrementScore, resetScores } = usePlayers();
-  const { teams, updateTeamScore, getTeamForPlayer, getNextUpPlayer, resetScores: resetTeamScores } = useTeams(players);
+  const {
+    teams,
+    addTeam,
+    updateTeam,
+    removeTeam,
+    updateTeamScore,
+    getTeamForPlayer,
+    resetScores: resetTeamScores,
+  } = useTeams(players);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Automatic fullscreen on native launch
@@ -81,6 +89,11 @@ function AppContent() {
             exit={{ opacity: 0, x: -20 }}
           >
             <SetupPage
+              teams={teams}
+              addTeam={addTeam}
+              updateTeam={updateTeam}
+              removeTeam={removeTeam}
+              getTeamForPlayer={getTeamForPlayer}
               onComplete={() => setCurrentGame('hub')}
             />
           </motion.div>
@@ -113,22 +126,26 @@ function AppContent() {
                   <h2 className="text-sm font-black uppercase tracking-widest text-slate-400">Players</h2>
                 </div>
                 <div className="grid grid-cols-1 gap-2">
-                  {players.map(player => (
-                    <motion.div
-                      layout="position"
-                      key={player.id}
-                      className="flex items-center justify-between bg-slate-900/50 p-4 rounded-2xl border border-slate-800"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: player.color }} />
-                        <span className="font-bold text-lg">{player.name}</span>
-                        <span className="text-xs text-slate-500">({teams.find(t => t.playerIds.includes(player.id))?.name || 'No team'})</span>
-                      </div>
-                      <button onClick={() => removePlayer(player.id)} className="text-slate-600 hover:text-red-500 p-2">
-                        <X size={18} />
-                      </button>
-                    </motion.div>
-                  ))}
+                  {players.map((player) => {
+                    const team = getTeamForPlayer(player.id);
+
+                    return (
+                      <motion.div
+                        layout="position"
+                        key={player.id}
+                        className="flex items-center justify-between bg-slate-900/50 p-4 rounded-2xl border border-slate-800"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: player.color }} />
+                          <span className="font-bold text-lg">{player.name}</span>
+                          <span className="text-xs text-slate-500">({team?.name || 'No team'})</span>
+                        </div>
+                        <button onClick={() => removePlayer(player.id)} className="text-slate-600 hover:text-red-500 p-2">
+                          <X size={18} />
+                        </button>
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </section>
 
@@ -212,8 +229,6 @@ function AppContent() {
             players={players}
             teams={teams}
             updateTeamScore={updateTeamScore}
-            getTeamForPlayer={getTeamForPlayer}
-            getNextUpPlayer={getNextUpPlayer}
             onBack={() => setCurrentGame('hub')}
             setCurrentGame={setCurrentGame}
           />
@@ -293,7 +308,7 @@ function Scoreboard({ players, teams, onReset }: { players: Player[], teams: Tea
               <h3 className="text-sm font-black uppercase tracking-widest text-slate-500 mb-4">Individual Standings</h3>
               <div className="space-y-2">
                 {sortedPlayers.map((player, idx) => {
-                  const team = teams.find(t => t.playerIds.includes(player.id));
+                  const team = teams.find((entry) => entry.playerIds.includes(player.id));
                   return (
                     <div key={player.id} className="flex items-center justify-between bg-slate-900 p-4 rounded-2xl border border-slate-800">
                       <div className="flex items-center space-x-3">

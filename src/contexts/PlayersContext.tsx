@@ -22,6 +22,7 @@ const COLORS = [
 interface PlayersContextType {
   players: Player[];
   addPlayer: (name: string, avatar?: string) => void;
+  updatePlayer: (id: string, name: string, avatar?: string) => void;
   removePlayer: (id: string) => void;
   incrementScore: (id: string) => void;
   resetScores: () => void;
@@ -64,6 +65,21 @@ export const PlayersProvider: React.FC<{ children: React.ReactNode }> = ({ child
     ]);
   }, []);
 
+  const updatePlayer = useCallback((id: string, name: string, avatar?: string) => {
+    const trimmedName = name.trim();
+    if (!trimmedName) return;
+
+    setPlayers(prev => prev.map(player => (
+      player.id === id
+        ? {
+          ...player,
+          name: trimmedName,
+          avatar: avatar === undefined ? player.avatar : avatar,
+        }
+        : player
+    )));
+  }, []);
+
   const removePlayer = useCallback((id: string) => {
     setPlayers(prev => prev.filter(p => p.id !== id));
   }, []);
@@ -83,7 +99,7 @@ export const PlayersProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, []);
 
   return (
-    <PlayersContext.Provider value={{ players, addPlayer, removePlayer, incrementScore, resetScores }}>
+    <PlayersContext.Provider value={{ players, addPlayer, updatePlayer, removePlayer, incrementScore, resetScores }}>
       {children}
     </PlayersContext.Provider>
   );
@@ -127,6 +143,21 @@ export const usePlayers = () => {
       ]);
     }, []);
 
+    const updatePlayer = useCallback((id: string, name: string, avatar?: string) => {
+      const trimmedName = name.trim();
+      if (!trimmedName) return;
+
+      setPlayers(prev => prev.map(player => (
+        player.id === id
+          ? {
+            ...player,
+            name: trimmedName,
+            avatar: avatar === undefined ? player.avatar : avatar,
+          }
+          : player
+      )));
+    }, []);
+
     const removePlayer = useCallback((id: string) => {
       setPlayers(prev => prev.filter(p => p.id !== id));
     }, []);
@@ -145,7 +176,7 @@ export const usePlayers = () => {
       setPlayers(prev => prev.map(p => ({ ...p, score: 0 })));
     }, []);
 
-    return { players, addPlayer, removePlayer, incrementScore, resetScores };
+    return { players, addPlayer, updatePlayer, removePlayer, incrementScore, resetScores };
   }
   return context;
 };

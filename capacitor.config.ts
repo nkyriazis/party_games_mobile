@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.ticktackboom.app',
-  appName: 'Tick Tack Boom Greek',
+  appId: 'com.partygames.app',
+  appName: 'Party Games',
   webDir: 'dist',
   server: {
     androidScheme: 'https'

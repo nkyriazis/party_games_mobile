@@ -5,7 +5,7 @@ set -e
 # Builds web app using the original vite.config.ts
 
 BUILD_OUTPUT_DIR="/app/build-output"
-APK_PATH="${BUILD_OUTPUT_DIR}/tick-tack-boom.apk"
+APK_PATH="${BUILD_OUTPUT_DIR}/party-games.apk"
 
 echo "Starting Android build..."
 
@@ -18,14 +18,9 @@ else
     echo "Skipping npm install (dependencies unchanged)"
 fi
 
-# Only regenerate assets if source images changed
-ASSET_SOURCE_DIR="resources"
-if [ -d "android/app/src/main/res" ] && [ ! "${ASSET_SOURCE_DIR}" -nt "android/app/src/main/res" ]; then
-    echo "Skipping asset generation (assets unchanged)"
-else
-    echo "Generating Android launcher icons..."
-    npm run assets:android
-fi
+# Always regenerate assets (icon change may not be detected properly)
+echo "Generating Android launcher icons..."
+npm run assets:android
 
 # Build web app
 echo "Building web application..."
@@ -35,8 +30,10 @@ npm run build
 echo "Syncing Capacitor..."
 npx cap sync android
 
-# Build Android APK
+# Build Android APK (clean first to avoid stale caches)
 cd android
+echo "Cleaning Gradle build..."
+./gradlew clean --no-daemon
 echo "Building Android APK..."
 ./gradlew assembleDebug --no-daemon
 cd ..
@@ -44,11 +41,11 @@ cd ..
 # Copy APK to output directory
 echo "Copying APK to build-output..."
 mkdir -p "${BUILD_OUTPUT_DIR}"
-cp android/app/build/outputs/apk/debug/tick-tack-boom-debug.apk "${BUILD_OUTPUT_DIR}/tick-tack-boom.apk"
+cp android/app/build/outputs/apk/debug/party-games-debug.apk "${BUILD_OUTPUT_DIR}/party-games.apk"
 
 echo ""
 echo "=========================================="
 echo "Build complete!"
-echo "APK location: ${BUILD_OUTPUT_DIR}/tick-tack-boom.apk"
+echo "APK location: ${BUILD_OUTPUT_DIR}/party-games.apk"
 ls -lh "${APK_PATH}"
 echo "=========================================="

@@ -5,6 +5,9 @@ import { Player } from '../contexts/PlayersContext';
 import { Bomb, Play, X } from 'lucide-react';
 import { soundManager } from '../utils/soundManager';
 
+const TICK_TACK_BOOM_DEFAULT_ROUNDS = 8;
+const TICK_TACK_BOOM_ROUND_PRESETS = [5, 8, 12];
+
 export const TickTackBoomGame: React.FC<{
   players: Player[],
   incrementScore: (id: string) => void,
@@ -23,6 +26,10 @@ export const TickTackBoomGame: React.FC<{
 
   const [isSetup, setIsSetup] = useState(true);
   const [selectedPlayers, setSelectedPlayers] = useState<Set<string>>(new Set());
+  const [totalRounds, setTotalRounds] = useState(TICK_TACK_BOOM_DEFAULT_ROUNDS);
+  const [currentRound, setCurrentRound] = useState(1);
+  const [isMatchComplete, setIsMatchComplete] = useState(false);
+  const [matchScores, setMatchScores] = useState<Record<string, number>>({});
 
   // Audio control loop
   const lastTickRef = useRef<number>(0);
@@ -58,9 +65,49 @@ export const TickTackBoomGame: React.FC<{
     });
   };
 
+  const selectedPlayerList = players.filter((player) => selectedPlayers.has(player.id));
+  const sortedMatchPlayers = [...selectedPlayerList].sort(
+    (left, right) => (matchScores[right.id] ?? 0) - (matchScores[left.id] ?? 0)
+  );
+
+  const initializeMatch = () => {
+    const nextScores = Array.from(selectedPlayers).reduce<Record<string, number>>((scores, playerId) => {
+      scores[playerId] = 0;
+      return scores;
+    }, {});
+
+    setMatchScores(nextScores);
+    setCurrentRound(1);
+    setIsMatchComplete(false);
+    setIsSetup(false);
+    startGame();
+  };
+
+  const completeRound = (playerId?: string) => {
+    if (playerId) {
+      incrementScore(playerId);
+      setMatchScores((prev) => ({
+        ...prev,
+        [playerId]: (prev[playerId] ?? 0) + 1,
+      }));
+    }
+
+    confirmExplosion();
+
+    if (currentRound >= totalRounds) {
+      setIsMatchComplete(true);
+      return;
+    }
+
+    setCurrentRound((prev) => prev + 1);
+  };
+
   const handleBackToHub = () => {
     setIsSetup(true);
     setSelectedPlayers(new Set());
+    setCurrentRound(1);
+    setIsMatchComplete(false);
+    setMatchScores({});
     onBack();
   };
 
@@ -79,9 +126,50 @@ export const TickTackBoomGame: React.FC<{
             <h1 className="text-4xl font-black text-red-600 tracking-tighter uppercase italic">Tick Tack Boom</h1>
             <p className="text-slate-500 font-bold text-xs mt-2 uppercase tracking-widest">Party Edition</p>
             <p className="text-sm text-slate-400 mt-4">
-              Select players for this round
+              Select players and rounds for this match
             </p>
           </header>
+
+          <div className="mb-6 bg-slate-900/40 border border-slate-800 rounded-2xl p-4 space-y-4">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <div className="text-xs uppercase tracking-widest text-slate-500">Rounds</div>
+                <div className="text-3xl font-black text-white mt-2">{totalRounds}</div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setTotalRounds((prev) => Math.max(1, prev - 1))}
+                  className="h-11 w-11 rounded-2xl bg-slate-800 hover:bg-slate-700 text-xl font-black transition-colors"
+                >
+                  -
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTotalRounds((prev) => Math.min(20, prev + 1))}
+                  className="h-11 w-11 rounded-2xl bg-slate-800 hover:bg-slate-700 text-xl font-black transition-colors"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2">
+              {TICK_TACK_BOOM_ROUND_PRESETS.map((preset) => (
+                <button
+                  key={preset}
+                  type="button"
+                  onClick={() => setTotalRounds(preset)}
+                  className={`rounded-2xl border px-3 py-2 text-sm font-bold transition-colors ${totalRounds === preset
+                    ? 'border-red-500 bg-red-500/10 text-white'
+                    : 'border-slate-800 bg-slate-950/60 text-slate-400 hover:border-slate-700 hover:text-white'
+                    }`}
+                >
+                  {preset} rounds
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div className="flex-1 space-y-3 overflow-y-auto pr-2">
             {players.map(player => (
@@ -89,16 +177,14 @@ export const TickTackBoomGame: React.FC<{
                 layout="position"
                 key={player.id}
                 onClick={() => togglePlayerSelection(player.id)}
-                className={`flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all ${
-                  selectedPlayers.has(player.id)
+                className={`flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all ${selectedPlayers.has(player.id)
                     ? 'bg-red-600/10 border-red-600'
                     : 'bg-slate-900/50 border-slate-800 hover:border-slate-700'
-                }`}
+                  }`}
               >
                 <div className="flex items-center space-x-3">
-                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${
-                    selectedPlayers.has(player.id) ? 'border-red-600 bg-red-600' : 'border-slate-600'
-                  }`}>
+                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${selectedPlayers.has(player.id) ? 'border-red-600 bg-red-600' : 'border-slate-600'
+                    }`}>
                     {selectedPlayers.has(player.id) && (
                       <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -114,10 +200,7 @@ export const TickTackBoomGame: React.FC<{
           <footer className="py-6 space-y-3">
             {selectedPlayers.size >= 2 ? (
               <button
-                onClick={() => {
-                  setIsSetup(false);
-                  startGame();
-                }}
+                onClick={initializeMatch}
                 className="w-full bg-white text-slate-950 font-black py-5 rounded-3xl text-xl flex items-center justify-center space-x-3 active:scale-95 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)]"
               >
                 <Play fill="currentColor" />
@@ -162,7 +245,7 @@ export const TickTackBoomGame: React.FC<{
 
         <div className="space-y-4">
           <h2 className="text-5xl font-black italic tracking-tighter text-white">ΠΑΜΕ;</h2>
-          <p className="text-slate-400 font-medium">Προετοιμάστε τον επόμενο παίκτη!</p>
+          <p className="text-slate-400 font-medium">Γύρος {currentRound} από {totalRounds}</p>
         </div>
 
         <div className="w-full max-w-xs space-y-4">
@@ -176,7 +259,58 @@ export const TickTackBoomGame: React.FC<{
             onClick={() => setIsSetup(true)}
             className="text-slate-500 font-bold hover:text-white transition-colors flex items-center justify-center space-x-2 w-full"
           >
-            <span className="text-sm uppercase">ΑΛΛΑΓΗ ΠΑΙΚΤΩΝ</span>
+            <span className="text-sm uppercase">ΑΛΛΑΓΗ SETUP</span>
+          </button>
+        </div>
+      </motion.div>
+    );
+  }
+
+  if (isMatchComplete) {
+    return (
+      <motion.div
+        key="complete"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex-1 flex flex-col p-6 max-w-md mx-auto w-full"
+      >
+        <header className="py-8 text-center">
+          <h1 className="text-4xl font-black text-red-600 tracking-tighter uppercase italic">Tick Tack Boom</h1>
+          <p className="text-slate-400 mt-3">Match complete after {totalRounds} rounds.</p>
+        </header>
+
+        <div className="bg-slate-900/50 border border-slate-800 rounded-3xl p-5 space-y-3">
+          <div className="text-xs uppercase tracking-widest text-slate-500">Match Standings</div>
+          {sortedMatchPlayers.map((player, index) => (
+            <div key={player.id} className="flex items-center justify-between rounded-2xl bg-slate-950/60 border border-slate-800 px-4 py-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <span className="text-slate-600 font-black w-5">{index + 1}</span>
+                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: player.color }} />
+                <span className="font-bold truncate">{player.name}</span>
+              </div>
+              <span className="text-red-400 font-black">{matchScores[player.id] ?? 0} BOOMS</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 space-y-3">
+          <button
+            onClick={initializeMatch}
+            className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-3xl text-xl transition-all active:scale-95"
+          >
+            PLAY AGAIN
+          </button>
+          <button
+            onClick={() => setIsSetup(true)}
+            className="w-full text-slate-500 font-bold py-3 hover:text-white transition-colors text-sm uppercase tracking-widest"
+          >
+            New Match Setup
+          </button>
+          <button
+            onClick={handleBackToHub}
+            className="w-full text-slate-500 font-bold py-3 hover:text-white transition-colors text-sm uppercase tracking-widest"
+          >
+            Back to Hub
           </button>
         </div>
       </motion.div>
@@ -200,6 +334,9 @@ export const TickTackBoomGame: React.FC<{
           <X size={24} />
         </button>
         <div className="flex-1 flex flex-col items-center justify-center p-6 space-y-8 pt-12">
+          <div className="text-sm font-bold uppercase tracking-widest text-slate-500">
+            Round {currentRound} of {totalRounds}
+          </div>
           <div className="relative mb-8">
             <motion.div
               animate={{
@@ -267,10 +404,7 @@ export const TickTackBoomGame: React.FC<{
           {players.map(player => (
             <button
               key={player.id}
-              onClick={() => {
-                incrementScore(player.id);
-                confirmExplosion();
-              }}
+              onClick={() => completeRound(player.id)}
               className="p-6 rounded-3xl bg-slate-900 border-2 border-slate-800 active:bg-white active:text-slate-950 transition-all text-center flex flex-col items-center justify-center space-y-2 group"
             >
               <div className="w-4 h-4 rounded-full" style={{ backgroundColor: player.color }} />
@@ -281,7 +415,7 @@ export const TickTackBoomGame: React.FC<{
 
         <div className="space-y-4">
           <button
-            onClick={confirmExplosion}
+            onClick={() => completeRound()}
             className="w-full bg-white text-slate-950 font-black py-4 rounded-2xl text-lg"
           >
             Continue

@@ -1,4 +1,15 @@
 services:
+  web-prototype:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - web-prototype-node-modules:/app/node_modules
+
   android-build:
     build:
       context: .
@@ -6,3 +17,6 @@ services:
     volumes:
       - .:/app
       - ./build-output:/app/build-output
+
+volumes:
+  web-prototype-node-modules:

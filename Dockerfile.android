@@ -52,6 +52,13 @@ RUN chmod +x scripts/build-android.sh
 # Set Android SDK environment (explicit for clarity)
 ENV ANDROID_HOME=/opt/android-sdk
 ENV PATH=${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/34.0.0
+ENV ANDROID_KEYSTORE_DIR=/app/android/keystore
+
+# Create consistent debug keystore for reproducible builds
+# This allows installing APKs over existing installations
+# Keystore is stored in the project directory for persistence
+RUN mkdir -p ${ANDROID_KEYSTORE_DIR} && \
+    keytool -genkey -v -keystore ${ANDROID_KEYSTORE_DIR}/debug.keystore -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US" -storepass android
 
 # Container entrypoint - builds and then runs build-android.sh
 # Source is mounted at runtime via docker-compose.yml

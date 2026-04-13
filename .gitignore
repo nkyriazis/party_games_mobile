@@ -37,3 +37,6 @@ dist/
 platforms/
 plugins/
 www/
+
+# Generated data files
+src/data/taboo.json

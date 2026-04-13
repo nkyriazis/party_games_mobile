@@ -80,7 +80,7 @@ Then list: "Μετά μου έρχεται στο μυαλό [forbidden word]...
 Keep it fully in Greek, conversational, like you're narrating your own thought process
 
 OUTPUT FORMAT:
-Return a JSON array with 10 objects. Each object must have:
+Return a JSON array with {count} objects. Each object must have:
 - target: the Greek word
 - forbidden: array of 4-5 Greek constraint words
 - category: Greek category
@@ -105,27 +105,23 @@ Return a JSON array with 10 objects. Each object must have:
 Η σκέψη μου: "Όταν δω τη 'Μάμα', το πρώτο που μου έρχεται στο μυαλό είναι... 'μαμάκι' - αυτή είναι η λέξη. Μετά 'γονέας' - πολύ γενικό. Μετά 'οικογένεια' - είναι μέρος της οικογένειας. Μετά 'γέννα' - αυτή είναι η πρώτη της εισαγωγή. Αν πω 'μαμάκι', το ξέρουν αμέσως."
 Απαγορευμένες: ["μαμάκι", "γονέας", "οικογένεια", "γέννα"]
 
-Greek words only (modern Greek, not ancient). Return exactly 10 cards with full analysis.
-
-IMPORTANT: You MUST NOT reuse target words from previous cards. Each card must have a UNIQUE target word.`;
+Greek words only (modern Greek, not ancient). Return exactly {count} cards with full analysis.
+`;
 
 // Generate cards using LangChain with structured output
-async function generateCards(llm, count = 10, excludedTargets = []) {
+async function generateCards(llm, count, timestamp) {
   let systemPrompt = TABOO_PROMPT;
 
-  if (excludedTargets.length > 0) {
-    const excludedStr = `\n\nIMPORTANT EXCLUSION LIST - DO NOT USE ANY OF THESE AS TARGET WORDS:\n${excludedTargets.map(w => `- ${w}`).join('\n')}\n\nEach new card MUST have a target word NOT in this list. Be extra careful to choose completely different words.`;
-    systemPrompt += excludedStr;
-  }
+  // Add timestamp for stochasticity at the top
+  const randomStr = timestamp ? `Current timestamp: ${timestamp}` : `Random seed: ${Math.random().toString(36).substring(7)}`;
+  systemPrompt = systemPrompt.replace('{randomness}', randomStr);
 
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', systemPrompt],
-    ['human', `Generate {count} taboo cards. Make sure target words are NOT in the exclusion list above.`],
+    ['human', `Generate exactly {count} unique taboo cards.`],
   ]);
 
-  // Use withStructuredOutput to enforce the schema on the model
   const structuredLlm = llm.withStructuredOutput(TabooCardsSchema);
-
   const chain = prompt.pipe(structuredLlm);
 
   const result = await chain.invoke({ count });
@@ -141,110 +137,107 @@ async function generateCards(llm, count = 10, excludedTargets = []) {
   }));
 }
 
-// Load previously generated cards to track used targets
-function loadExistingCards(path) {
+// Main function to generate and append cards
+async function generateAndAppend(targetCount, outputPath, llm) {
+  // Load existing cards
+  let existingCards = [];
   try {
-    if (fs.existsSync(path)) {
-      const data = fs.readFileSync(path, 'utf8');
-      const cards = JSON.parse(data);
-      return Array.isArray(cards) ? cards : [];
+    if (fs.existsSync(outputPath)) {
+      const data = fs.readFileSync(outputPath, 'utf8');
+      existingCards = JSON.parse(data);
+      if (!Array.isArray(existingCards)) existingCards = [];
     }
   } catch (e) {
-    console.warn(`Could not load existing cards from ${path}: ${e.message}`);
+    console.warn(`Could not load existing cards: ${e.message}`);
   }
-  return [];
-}
 
-// Generate cards in batches with exclusion tracking
-async function generateBatches(llm, totalCount, batchSize, outputPath) {
-  const existing = loadExistingCards(outputPath);
-  const existingTargets = new Set(existing.map(c => c.target));
+  // Initialize file if it doesn't exist
+  if (existingCards.length === 0 && !fs.existsSync(outputPath)) {
+    fs.writeFileSync(outputPath, '[\n');
+  }
 
-  let allCards = [...existing];
-  let batchNumber = 1;
-  let generatedInThisRun = 0;
+  let newCards = [];
+  let attempt = 1;
+  const maxAttempts = 10;
 
-  console.log(`Starting batch generation: ${totalCount} total, ${batchSize} per batch`);
-  console.log(`Found ${existingTargets.size} existing target words to exclude\n`);
+  console.log(`\n=== Taboo Card Generator ===`);
+  console.log(`Target: ${targetCount} new cards`);
+  console.log(`Found ${existingCards.length} existing cards\n`);
 
-  while (generatedInThisRun < totalCount) {
-    const remaining = totalCount - generatedInThisRun;
-    const currentBatchSize = Math.min(batchSize, remaining);
+  while (newCards.length < targetCount && attempt <= maxAttempts) {
+    const remaining = targetCount - newCards.length;
+    const timestamp = new Date().toISOString();
 
-    console.log(`--- Batch ${batchNumber} ---`);
-    console.log(`Generating ${currentBatchSize} cards (batch ${batchNumber})...`);
-    console.log(`Excluding ${existingTargets.size} previously used targets\n`);
+    console.log(`--- Attempt ${attempt} ---`);
+    console.log(`Generating ${remaining} cards`);
 
-    const excludedList = Array.from(existingTargets).sort();
-    const newCards = await generateCards(llm, currentBatchSize, excludedList);
+    const batch = await generateCards(llm, remaining + 5, timestamp);
+    console.log(`  Raw output: ${batch.length} cards`);
 
-    // Validate no duplicates with existing targets
-    const validatedCards = newCards.filter(card => {
-      if (existingTargets.has(card.target)) {
-        console.log(`  [SKIP] Duplicate target: "${card.target}"`);
-        return false;
+    // Deduplicate within this batch
+    const seenTargets = new Set(newCards.map(c => c.target));
+    const validCards = [];
+
+    for (const card of batch) {
+      if (!seenTargets.has(card.target)) {
+        validCards.push(card);
+        seenTargets.add(card.target);
+      } else {
+        console.log(`  [SKIP] Duplicate: "${card.target}"`);
       }
-      return true;
-    });
-
-    if (validatedCards.length === 0) {
-      console.log('No valid new cards generated, stopping.');
-      break;
     }
 
-    // Track new targets and add to allCards
-    let newUnique = 0;
-    for (const card of validatedCards) {
-      existingTargets.add(card.target);
-      allCards.push(card);
-      newUnique++;
-      generatedInThisRun++;
+    console.log(`  Valid: ${validCards.length} unique cards`);
+
+    // Append to file immediately
+    for (const card of validCards) {
+      if (newCards.length < targetCount) {
+        newCards.push(card);
+        const isSecondOrLater = newCards.length > 1;
+        const comma = isSecondOrLater ? ',' : '';
+        fs.appendFileSync(outputPath, `${comma}\n${JSON.stringify(card, null, 2)}`);
+        console.log(`  [APPENDED] "${card.target}"`);
+      }
     }
 
-    console.log(`Batch ${batchNumber} result: ${newUnique} new unique targets`);
-    console.log(`Total accumulated: ${allCards.length} cards\n`);
-
-    // Save after each batch
-    fs.writeFileSync(outputPath, JSON.stringify(allCards, null, 2));
-    console.log(`Saved to ${outputPath}\n`);
-
-    batchNumber++;
+    console.log(`  Total new: ${newCards.length}/${targetCount}\n`);
+    attempt++;
   }
 
-  console.log(`=== Generation Complete ===`);
-  console.log(`Total cards: ${allCards.length}`);
-  console.log(`New cards in this run: ${generatedInThisRun}`);
+  // Close the JSON array
+  fs.appendFileSync(outputPath, '\n]');
 
-  return allCards;
+  console.log(`=== Complete ===`);
+  console.log(`Total cards: ${existingCards.length + newCards.length}`);
+  console.log(`New in this run: ${newCards.length}`);
+  console.log(`Saved to: ${outputPath}`);
+
+  return [...existingCards, ...newCards];
 }
 
 async function main() {
   const outputPath = '/home/kyriazis/work/tick_tack_boom/src/data/taboo-generated.json';
 
-  // Parse command line arguments: node script.mjs <totalCount> <batchSize>
   const args = process.argv.slice(2);
-  const totalCount = parseInt(args[0], 10) || 10;
-  const batchSize = parseInt(args[1], 10) || 5;
+  const targetCount = parseInt(args[0], 10) || 10;
 
-  // Initialize LLM with Ollama
   const llm = new ChatOllama({
     model: 'qwen3-coder-256k',
     baseUrl: 'http://139.91.185.101:11434',
     temperature: 0.7,
   });
 
-  console.log(`\nGenerating ${totalCount} taboo cards in batches of ${batchSize}...`);
+  console.log(`\nGenerating ${targetCount} taboo cards...`);
   console.log(`Model: ${llm.model}\n`);
 
-  const cards = await generateBatches(llm, totalCount, batchSize, outputPath);
+  const cards = await generateAndAppend(targetCount, outputPath, llm);
 
-  // Show first card
   if (cards.length > 0) {
-    console.log('First card:');
-    console.log(JSON.stringify(cards[0], null, 2));
+    console.log('\nLast card:');
+    console.log(JSON.stringify(cards[cards.length - 1], null, 2));
   }
 }
 
 main().catch(console.error);
 
-export { generateCards };
+export { generateCards, generateAndAppend };

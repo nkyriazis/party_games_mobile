@@ -54,6 +54,13 @@ export const useTaboo = (
     nextCard();
   }, [nextCard]);
 
+  const resetRound = useCallback(() => {
+    setCurrentCard(null);
+    setTimeLeft(60);
+    setIsPlaying(false);
+    setIsGameOver(false);
+  }, []);
+
   return {
     currentCard,
     timeLeft,
@@ -63,5 +70,6 @@ export const useTaboo = (
     handleCorrect,
     handleTaboo,
     handlePass,
+    resetRound,
   };
 };

@@ -2,17 +2,33 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Common Commands
+## Important: Docker-Only Development
 
-- **Development**: `npm run dev` (starts Vite server with `--host`)
-- **Build**: `npm run build` (type-checks and builds production bundle)
-- **Testing**:
-  - Run all tests: `npm run test`
-  - Watch mode: `npm run test:watch`
+**All Android building and asset generation must be done inside Docker containers using `docker compose`. Never run Android build commands directly on the host system.**
+
+### Android Build (inside container)
+
+- **Build Android APK**: `docker compose run --rm android-build`
+  - This runs the `build-android.sh` script which:
+    1. Installs dependencies if changed
+    2. Generates Android launcher icons
+    3. Builds the web app with Vite
+    4. Syncs Capacitor
+    5. Builds the Android APK with Gradle
+  - Output APK is copied to `./build-output/tick-tack-boom.apk`
+
+- **Regenerate Android assets**: `docker compose run --rm android-build npm run assets:android`
+
+### Web Development
+
+The following can be run on the host or in the container:
+- **Start dev server**: `npm run dev` (Vite with `--host`)
+- **Build web app**: `npm run build` (type-checks + Vite)
+- **Testing**: `npm run test` or `npm run test:watch`
 - **Linting**: `npm run lint`
-- **Android Build**: `npm run android:build` (uses Docker to build Android APK)
-- **Android Assets**: `npm run assets:android` (generates app icons/splash screens)
-- **Data Generation**: `npm run grams:generate` (updates `src/data/grams.json` from wordlist)
+- **Data Generation**: `npm run grams:generate`
+
+## Architecture and Structure
 
 ## Architecture and Structure
 
