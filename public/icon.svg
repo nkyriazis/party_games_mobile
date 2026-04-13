@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+  <defs>
+    <linearGradient id="badge" x1="224" y1="176" x2="836" y2="848" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1E293B"/>
+      <stop offset="0.52" stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="bombFuse" x1="590" y1="436" x2="700" y2="220" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FB7185"/>
+      <stop offset="0.45" stop-color="#F97316"/>
+      <stop offset="1" stop-color="#FDE047"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="512" cy="512" r="392" fill="url(#badge)"/>
+  <circle cx="512" cy="512" r="392" stroke="#334155" stroke-width="24"/>
+
+  <g transform="rotate(-12 362 504)">
+    <rect x="244" y="314" width="244" height="332" rx="56" fill="#2563EB"/>
+    <rect x="292" y="392" width="148" height="24" rx="12" fill="#DBEAFE" opacity="0.95"/>
+    <rect x="292" y="448" width="116" height="24" rx="12" fill="#DBEAFE" opacity="0.75"/>
+    <rect x="292" y="504" width="132" height="24" rx="12" fill="#DBEAFE" opacity="0.55"/>
+  </g>
+
+  <g transform="rotate(11 664 484)">
+    <rect x="542" y="292" width="244" height="332" rx="56" fill="#F8FAFC"/>
+    <circle cx="626" cy="390" r="16" fill="#2563EB"/>
+    <circle cx="664" cy="438" r="16" fill="#2563EB" opacity="0.88"/>
+    <circle cx="702" cy="486" r="16" fill="#2563EB" opacity="0.76"/>
+    <rect x="610" y="552" width="108" height="20" rx="10" fill="#CBD5E1"/>
+  </g>
+
+  <path d="M570 427C622 391 658 317 614 244" stroke="url(#bombFuse)" stroke-width="28" stroke-linecap="round"/>
+
+  <g stroke="#FBBF24" stroke-linecap="round" stroke-width="22">
+    <path d="M620 188L620 140"/>
+    <path d="M620 188L656 162"/>
+    <path d="M620 188L668 188"/>
+    <path d="M620 188L652 222"/>
+    <path d="M620 188L620 236"/>
+    <path d="M620 188L586 222"/>
+    <path d="M620 188L572 188"/>
+    <path d="M620 188L586 154"/>
+  </g>
+
+  <circle cx="512" cy="580" r="172" fill="#111827"/>
+  <circle cx="512" cy="580" r="172" stroke="#E2E8F0" stroke-width="24"/>
+  <circle cx="425" cy="495" r="34" fill="#334155" opacity="0.8"/>
+  <circle cx="512" cy="580" r="20" fill="#F8FAFC"/>
+  <circle cx="454" cy="646" r="20" fill="#F8FAFC" opacity="0.92"/>
+  <circle cx="570" cy="646" r="20" fill="#F8FAFC" opacity="0.92"/>
+</svg>
