@@ -26,6 +26,12 @@ npm run assets:android
 echo "Building web application..."
 npm run build
 
+# android/ is generated (gitignored); create it on fresh checkouts such as CI
+if [ ! -d android ]; then
+    echo "Adding Capacitor Android platform..."
+    npx cap add android
+fi
+
 # Sync Capacitor
 echo "Syncing Capacitor..."
 npx cap sync android
@@ -34,14 +40,27 @@ npx cap sync android
 cd android
 echo "Cleaning Gradle build..."
 ./gradlew clean --no-daemon
-echo "Building Android APK..."
-./gradlew assembleDebug --no-daemon
+# With a keystore, build a signed release APK; the stable key lets new builds install over old ones.
+# Otherwise fall back to a debug build (signed with a throwaway per-container debug key).
+if [ -n "${ANDROID_KEYSTORE_FILE}" ] && [ -f "${ANDROID_KEYSTORE_FILE}" ]; then
+    echo "Building signed release APK..."
+    ./gradlew assembleRelease --no-daemon \
+        -Pandroid.injected.signing.store.file="${ANDROID_KEYSTORE_FILE}" \
+        -Pandroid.injected.signing.store.password="${ANDROID_KEYSTORE_PASSWORD}" \
+        -Pandroid.injected.signing.key.alias="${ANDROID_KEY_ALIAS}" \
+        -Pandroid.injected.signing.key.password="${ANDROID_KEY_PASSWORD:-${ANDROID_KEYSTORE_PASSWORD}}"
+    APK_SRC=$(ls app/build/outputs/apk/release/*.apk | grep -v unsigned | head -n 1)
+else
+    echo "No keystore configured (ANDROID_KEYSTORE_FILE); building debug APK..."
+    ./gradlew assembleDebug --no-daemon
+    APK_SRC=$(ls app/build/outputs/apk/debug/*.apk | head -n 1)
+fi
 cd ..
 
 # Copy APK to output directory
 echo "Copying APK to build-output..."
 mkdir -p "${BUILD_OUTPUT_DIR}"
-cp android/app/build/outputs/apk/debug/party-games-debug.apk "${BUILD_OUTPUT_DIR}/party-games.apk"
+cp "android/${APK_SRC}" "${APK_PATH}"
 
 echo ""
 echo "=========================================="

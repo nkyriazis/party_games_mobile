@@ -1,0 +1,72 @@
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write # publish the rolling "latest" release
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      # Same Dockerized build as local development (see CLAUDE.md)
+      - name: Build builder image
+        run: docker compose build android-build
+
+      - name: Restore signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          touch signing.env
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            mkdir -p .signing
+            echo "$KEYSTORE_BASE64" | base64 -d > .signing/party-games-release.jks
+            {
+              echo "ANDROID_KEYSTORE_FILE=/app/.signing/party-games-release.jks"
+              echo "ANDROID_KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD"
+              echo "ANDROID_KEY_ALIAS=$KEY_ALIAS"
+              echo "ANDROID_KEY_PASSWORD=$KEYSTORE_PASSWORD"
+            } > signing.env
+          else
+            echo "::warning::No signing secrets; building a debug APK that won't install over previous builds"
+          fi
+
+      - name: Build APK
+        run: docker compose --env-file signing.env run --rm android-build
+
+      - name: Clean up signing key
+        if: always()
+        run: sudo rm -rf .signing signing.env
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: party-games-apk
+          path: build-output/party-games.apk
+          retention-days: 30
+
+      - name: Publish rolling "latest" release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NOTES="Built from ${GITHUB_SHA::7} on $(date -u +'%Y-%m-%d %H:%M UTC'). Download party-games.apk on your phone to install or update."
+          if gh release view latest >/dev/null 2>&1; then
+            gh release edit latest --title "Latest build" --notes "$NOTES" --prerelease
+            git push -f origin "HEAD:refs/tags/latest"
+          else
+            git tag -f latest && git push -f origin latest
+            gh release create latest --title "Latest build" --notes "$NOTES" --prerelease
+          fi
+          gh release upload latest build-output/party-games.apk --clobber

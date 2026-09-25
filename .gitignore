@@ -38,5 +38,9 @@ platforms/
 plugins/
 www/
 
-# Generated data files
-src/data/taboo.json
+# Generated data files (taboo.json is derived but tracked so `npm run dev` works on a fresh clone)
+.taboo-work/
+
+# Release signing keys (never commit)
+.signing/*
+!.signing/README.md
