@@ -1,183 +1,156 @@
 ---
 name: taboo
-description: Generate Greek taboo cards for the party game
+description: Create, review, or audit Greek Taboo cards for the party game. Use when the user wants new taboo cards (e.g. "/taboo 10 φαγητό"), wants existing cards checked or fixed, or when a workflow agent is writing or critiquing a batch of cards.
 ---
 
-# /taboo - Generate Taboo Cards
+# Greek Taboo cards
 
-Generate Greek taboo cards and append them to the game's data file.
+A card is one **target** word plus **exactly 5 forbidden words**. The describer must get their team to say the target without saying the target itself, any form of it, or any forbidden word.
 
-**CRITICAL: This skill must APPEND to the file, not replace it.**
+A great card is **hard but fair**. The forbidden words take away the obvious ways to describe the target, but a clever player can still get there in about 30 seconds.
 
-## Usage
+## Files and commands
 
-```
-/taboo <count> [category/theme]
-```
+| What | Where |
+|---|---|
+| Deck (source of truth, append-only) | `src/data/taboo-generated.json` |
+| Planned targets | `src/data/taboo-plan.json` |
+| Approved words missing from the wordlist | `src/data/taboo-extra-words.txt` |
+| Validator | `scripts/validate-taboo.mjs` |
 
-Where:
-- `<count>` is the number of cards to generate (e.g., `/taboo 10`)
-- `[category/theme]` is an optional influencing factor to guide generation (e.g., `/taboo 10 φαγητό`, `/taboo 5 παιχνίδια`, `/taboo 8 οικογένεια`)
+`src/data/taboo.json` is built from the deck by `npm run taboo:prepare`. Never edit it by hand.
 
-## Card Structure
-
-Each card has:
-- **target**: A concrete Greek word (2-4 syllables, noun/verb/adjective)
-- **forbidden**: 4-5 Greek words that would make describing the target TOO EASY
-- **category**: Greek category (e.g., "φαγητό", "οικογένεια", "αθλητισμός")
-- **analysis**: First-person narrative of the thought process
-
-## The Player's Journey (How Forbidden Words Are Determined)
-
-**READ THIS FIRST** - The game is about catching yourself in the act of almost saying the forbidden word.
-
-When a player draws a card, their mind does this:
-1. They see the TARGET word at the top
-2. Their brain immediately starts forming sentences to describe it
-3. The FIRST words that pop into their head are the FORBIDDEN words
-4. These are words they would BLURT OUT before remembering NOT to say them
-
-### Chain-of-Thought for Each Card
-
-1. Imagine you are the player seeing this word for the first time
-2. What are the FIRST 4-5 words that come to mind?
-3. These are the words you would say BEFORE catching yourself
-4. These become the forbidden words
-
-### What Makes a Good Forbidden Word
-
-- **The WORD ITSELF gives away the answer** (not just context)
-- **It's the first word your brain says before your mouth catches up**
-
-**Examples that work:**
-| Target | Forbidden | Why |
-|--------|-----------|-----|
-| Marco | Polo | Immediately follows "Marco" in the mind |
-| Coffee | drink | First category that comes to mind |
-| Run | fast/move | First verbs that come to mind |
-
-**Examples that DON'T work:**
-| Target | Bad Forbidden | Why |
-|--------|---------------|-----|
-| Coffee | bean | Not the first thing people think |
-| Coffee | espresso | Too specific, not the first thing |
-| Coffee | morning | Context, not the word itself |
-
-### Rules for Good Taboo Cards
-
-1. **TARGET WORD:**
-   - Must be a concrete, commonly used Greek word (2-4 syllables)
-   - Prefer nouns, verbs, or adjectives
-   - Must NOT be a name or proper noun
-
-2. **FORBIDDEN WORD TEST (ASK YOURSELF):**
-   - If I say this word, would the team immediately know the target?
-   - Is this the FIRST word that pops into my head when I see the target?
-   - If YES to either, it belongs in forbidden
-
-3. **WHAT TO AVOID:**
-   - Words that need explanation to connect to the target
-   - Words that are too obscure or unrelated
-   - Words from completely different domains
-   - The target word itself
-   - Duplicate words in the forbidden list
-
-4. **CARD QUALITY:**
-   - 4-5 forbidden words per card (no more, no less)
-   - All forbidden words should feel like natural, first-thought responses
-   - Category should be meaningful, accurate, and in Greek only
-   - ALL words in the forbidden list MUST be Greek (no English words)
-
-## Influencing Generation
-
-You can influence the generated cards by specifying a category or theme:
-
-- **By category**: `/taboo 10 φαγητό` - generates food-related cards
-- **By theme**: `/taboo 5 παιχνίδια` - generates game-related cards
-- **By concept**: `/taboo 8 οικογένεια` - generates family-related cards
-- **Mixed**: `/taboo 12 καιρός` - generates weather/time-related cards
-
-If no category is specified, cards will be generated across various themes.
-
-## Analysis Format (How to Write the Analysis)
-
-The analysis should read like the player is narrating their own thought process:
-
-**Start with:** "Όταν δω τη λέξη '[target]', πρώτο πράγμα που μου έρχεται στο μυαλό είναι..."
-
-**Then list:** "Μετά μου έρχεται στο μυαλό [forbidden word]..."
-
-Keep it fully in Greek, conversational, like you're narrating your own thought process.
-
-## Examples (Playing the Game in My Mind)
-
-### Example 1: "ΜΑΡΚΟ"
-**Analysis:** "Όταν δω το 'Μαρκο', το πρώτο που μου έρχεται στο μυαλό είναι... Πόλο! Αυτό είναι αυτόματο. Μετά μου έρχεται στο μυαλό 'απάντηση', μετά 'συνέχεια', 'κάλεσμα', 'απάντηση' - όλα τα πράγματα που ακολουθούν το 'Μαρκο' στο μυαλό μου. Αν πω κάποια από αυτά, η ομάδα το ξέρει αμέσως."
-
-**Forbidden:** ["Πόλο", "απάντηση", "συνέχεια", "κάλεσμα"]
-
-### Example 2: "ΚΑΦΕΣ"
-**Analysis:** "Όταν δω τον 'Καφέ', το πρώτο που μου έρχεται στο μυαλό είναι... 'ποτό' - αυτή είναι η κατηγορία. Μετά μου έρχεται στο μυαλό 'καφεΐνη' - αυτό είναι αυτό που το κάνει. Μετά 'πρωί' - αυτή την ώρα το πίνω. Μετά 'εσπρέσο' - αυτό είναι ένα είδος. Αν πω 'ποτό', το ξέρουν αμέσως."
-
-**Forbidden:** ["ποτό", "καφεΐνη", "πρωί", "εσπρέσο"]
-
-### Example 3: "ΤΡΕΧΩ"
-**Analysis:** "Όταν δω το 'Τρέχω', το πρώτο που μου έρχεται στο μυαλό είναι... 'κίνηση' - αυτή είναι η βασική ενέργεια. Μετά μου έρχεται στο μυαλό 'γρήγορα' - αυτό είναι το τρέξιμο. Μετά 'σπριντ' - αυτό είναι τρέξιμο σκληρά. Μετά 'τρέλα' - αυτό είναι τρέξιμο αργά. Αν πω 'κίνηση', το καταλαβαίνουν."
-
-**Forbidden:** ["κίνηση", "γρήγορα", "σπριντ", "τρέλα"]
-
-### Example 4: "ΜΑΜΑ"
-**Analysis:** "Όταν δω τη 'Μάμα', το πρώτο που μου έρχεται στο μυαλό είναι... 'μαμάκι' - αυτή είναι η λέξη. Μετά 'γονέας' - πολύ γενικό. Μετά 'οικογένεια' - είναι μέρος της οικογένειας. Μετά 'γέννα' - αυτή είναι η πρώτη της εισαγωγή. Αν πω 'μαμάκι', το ξέρουν αμέσως."
-
-**Forbidden:** ["μαμάκι", "γονέας", "οικογένεια", "γέννα"]
-
-## Implementation Rules (READ THIS FIRST)
-
-**IMPORTANT: How to properly append to the file:**
-
-1. **READ the existing file first** (`/home/kyriazis/work/tick_tack_boom/src/data/taboo-generated.json`)
-2. **PARSE the JSON** to understand its structure (it's an array of card objects)
-3. **APPEND your new cards** to the array (before the closing `]`)
-4. **WRITE the entire updated array** back to the file
-
-**DO NOT:**
-- Use `Write` to create a new file from scratch
-- Start with an empty array `[]`
-- Replace the entire file content
-- Forget to read the existing content first
-
-**DO:**
-- Use `Read` first to get the existing content
-- Parse the JSON, add your new cards to the array
-- Keep the existing cards intact
-- Write the combined array back
-
-## Validation
-
-After writing, always validate the JSON is correct:
-```
-python3 -m json.tool /home/kyriazis/work/tick_tack_boom/src/data/taboo-generated.json > /dev/null 2>&1 && echo "Valid JSON" || echo "Invalid JSON"
+```bash
+node scripts/validate-taboo.mjs cards <file.json>            # check candidate cards, change nothing
+node scripts/validate-taboo.mjs cards <file.json> --append   # append the error-free cards to the deck
+node scripts/validate-taboo.mjs targets <file.json> [--append]  # check / add planned targets
+node scripts/validate-taboo.mjs next 10                      # next 10 pending planned targets
+node scripts/validate-taboo.mjs skip <target> "<reason>"     # drop a planned target
+node scripts/validate-taboo.mjs status                       # counts by category / difficulty
+node scripts/validate-taboo.mjs deck                         # re-check the whole deck
 ```
 
-Also check for duplicate targets by counting:
+Only change the deck through `cards --append`. Never rewrite the file by hand. The validator enforces the mechanical rules: format, exactly 5 words, every word must appear in `public/greek_wordlist.txt` (or the extra-words list), no word may share a root with the target, and no duplicate targets. **Errors** block a card. **Warnings** are for you to judge. Everything below is the judgment the validator cannot do.
+
+## Card format
+
+```json
+{ "target": "ομπρέλα", "forbidden": ["βροχή", "ήλιος", "παραλία", "ανοίγω", "αδιάβροχο"], "category": "Αντικείμενα", "difficulty": "easy" }
 ```
-grep -c '"target":' /home/kyriazis/work/tick_tack_boom/src/data/taboo-generated.json
-```
-This should equal the expected count (original + new cards).
+
+- Write every word **lowercase with accents** (`ψωμί`, not `ΨΩΜΙ`). The build uppercases targets for display.
+- Use dictionary forms. Nouns: nominative singular (use the plural only when the word normally is plural, e.g. `γενέθλια`). Verbs: first person present (`τρέχω`). Adjectives: masculine singular (`κουρασμένος`).
+
+## Choosing targets
+
+A good target is a word **every adult Greek speaker knows and uses**. Test: would a 14-year-old and a 70-year-old at the same table both know it right away? If not, skip it.
+
+- **Yes:** everyday objects, food, places, jobs, animals, activities, feelings, customs, well-known concepts (`ομπρέλα`, `σουβλάκι`, `λαϊκή`, `γιαγιά`, `ξενύχτι`, `ζήλια`, `κέρασμα`, `πανηγύρι`).
+- **No:** proper nouns, brands, acronyms, technical or scientific terms, rare formal words (`αρτοποιΐα`), regional slang, crude or offensive words, and words so generic they can't be described (`πράγμα`, `κάνω`).
+- **Aim for a mix:** about 65% concrete nouns, 20% verbs and adjectives, 15% abstract ideas and customs.
+- **Greek culture is a bonus.** `τσίπουρο`, `γιορτή`, `λαϊκή`, `κουμπάρος`, `φραπές` make better cards than words that only exist because they were translated.
+- **Only add a target near an existing one if it's truly a different concept.** `καφές` and `καφετέρια` can both exist. `μπάσκετ` and `μπασκέτα` cannot. When the validator warns "similar to existing target", decide which case you're in.
+
+## Choosing the 5 forbidden words
+
+Play the card in your head. Look at the target and note the first things you would say to describe it. Those are the forbidden words.
+
+**The core test:** show a teammate only the 5 forbidden words and they should guess the target almost at once. If they wouldn't, at least one word is weak.
+
+**Each word should block a different way of describing the target.** Choose from:
+
+1. **Category / synonym:** what it *is* (`φρούτο` for πορτοκάλι, `ποτό` for τσίπουρο)
+2. **Function / action:** what it *does* or what you *do* with it (`ανοίγω` for ομπρέλα, `κόβω` for μαχαίρι)
+3. **Place / occasion:** where or when it happens (`παραλία`, `πρωί`, `κουζίνα`)
+4. **Defining part or property:** (`κεριά` for τούρτα, `ουρά` for γάτα)
+5. **Set phrase / partner word:** the word that always goes with it (`χρόνια` for γενέθλια because of *χρόνια πολλά*, `πιρούνι` for μαχαίρι)
+6. **Opposite / pair:** (`κρύο` for ζέστη)
+
+**Weak forbidden words (replace them):**
+- **Loosely related:** `ρύζι` for ψωμί (a teammate wouldn't guess bread from it)
+- **Random:** `καρκίνος` for μπάσκετ
+- **Too specific or rare:** `εσπρέσο` for καφές is fine, but `αρτοποιΐα` for ψωμί is not something anyone says
+- **Wrong:** `κίτρινο` for πορτοκάλι (the fruit is orange)
+- **Redundant:** a second word covering the same route (`βροχή` + `βρέχει`), which wastes a slot
+- **Same root as the target:** `ψωμάκι`, `καφεΐνη`, `πορτοκαλάδα`. These are already banned, so they waste a slot (the validator rejects them).
+
+**Fairness check:** with all 5 words blocked, can you still describe the target in two different ways? If you can't, the card is unplayable. Swap the least essential forbidden word for a weaker one, or drop the target.
+
+## Difficulty
+
+Rate the card as a whole, *after* choosing the forbidden words:
+
+- **easy:** a very common concrete word. Even with the 5 words blocked, many clear descriptions remain (`γάτα`, `γενέθλια`, `ομπρέλα`).
+- **medium:** common, but the forbidden words block the natural ways to describe it, so the player needs a detour (`διακοπές`, `πορτοκάλι`, `κουμπάρος`).
+- **hard:** an abstract idea, a verb or adjective, or a word with few ways left to describe it. Still known to everyone (`νοσταλγία`, `ζήλια`, `ξενύχτι`, `βαριέμαι`).
+
+Aim for about 40% easy, 40% medium, 20% hard across the deck.
+
+## Categories
+
+Reuse one of these exact names. Add a new one only when none fits:
+
+`Φαγητό & ποτό` · `Σπίτι` · `Αντικείμενα` · `Ρούχα & αξεσουάρ` · `Σώμα & υγεία` · `Ζώα` · `Φύση & καιρός` · `Μέρη & πόλη` · `Μεταφορές` · `Επαγγέλματα & άνθρωποι` · `Οικογένεια & σχέσεις` · `Σχολείο & γνώση` · `Αθλητισμός` · `Τεχνολογία` · `Διασκέδαση & τέχνες` · `Γιορτές & έθιμα` · `Συναισθήματα & ιδιότητες` · `Ενέργειες` · `Χρόνος & έννοιες`
 
 ## Examples
 
-```
-/taboo 20
-```
-Generate 20 cards across various themes.
+### Good
+
+| Target | Forbidden | Diff. | Why it works |
+|---|---|---|---|
+| ομπρέλα | βροχή, ήλιος, παραλία, ανοίγω, αδιάβροχο | easy | Blocks weather, beach, action and synonym; "you carry it folded, it has a handle, you forget it on the bus" still works |
+| γενέθλια | τούρτα, κεριά, δώρο, πάρτι, χρόνια | easy | `χρόνια` blocks *χρόνια πολλά*, the first thing everyone would say |
+| πορτοκάλι | φρούτο, χυμός, στύβω, μανταρίνι, βιταμίνη | medium | Blocks the category, the juice route and its closest relative; the colour is still available but it's also a colour word |
+| διακοπές | καλοκαίρι, θάλασσα, ξενοδοχείο, άδεια, βαλίτσα | medium | Every natural route is gone; the player has to detour ("not working, you go away…") |
+| νοσταλγία | παρελθόν, αναμνήσεις, πατρίδα, μελαγχολία, ξενιτιά | hard | Abstract; `ξενιτιά` catches the very Greek association |
+
+### Bad (from the old deck) and the fix
+
+| Card | Problem | Fix |
+|---|---|---|
+| ΠΟΡΤΑ: [πόρτα] | Forbidden word is the target itself; only one word | πόρτα: κλειδί, ανοίγω, χτυπάω, είσοδος, πόμολο |
+| ΨΩΜΙ: φαγητό, ρύζι, ψωμάκι, αρτοποιΐα, κρούστα | `ψωμάκι` shares the root; `ρύζι` is loosely related; `αρτοποιΐα` is rare; `φαγητό` is too broad | ψωμί: φούρνος, αλεύρι, φραντζόλα, σάντουιτς, τοστ |
+| ΜΠΑΣΚΕΤΑ: καλάθι, μπάλα, αγώνας, καρκίνος, κράτα | Target isn't a word (it's `μπάσκετ`); `καρκίνος` and `κράτα` are random | μπάσκετ: καλάθι, μπάλα, ομάδα, πόντοι, ψηλός |
+| ΜΠΟΥΣΤΟ, ΚΟΥΦΑΡΙΣΜΑ | Not real words | Never invent words; the wordlist check catches this |
+
+## Writing cards (standalone `/taboo <count> [theme]`)
+
+1. Choose targets. Run `node scripts/validate-taboo.mjs status` to see what the deck already covers. With a theme, stay inside it. Without one, pick categories that are underrepresented.
+2. Write each card with the rules above. Spend real thought on each one. For every forbidden word, name which way of describing the target it blocks. If two words block the same way, replace one.
+3. Review your own cards with the rubric below, as if someone else wrote them. Fix or drop weak cards. Fewer great cards beat more mediocre ones.
+4. Write the cards to a scratch file and run `cards <file>`. Fix every error (for example, swap a same-root word for another clue). Resolve every warning or deliberately accept it.
+5. Run `cards <file> --append`, then report what was added and anything you dropped.
+
+Keep batches to about **10 cards**. Beyond that the forbidden lists get generic.
+
+## Growing the deck (many cards)
+
+For more than about 20 cards, use the saved `taboo-deck` workflow instead of writing cards inline. Planning picks unique targets first, then a writer and an independent critic handle each batch of 10:
 
 ```
-/taboo 10 φαγητό
+Workflow taboo-deck  args: {"mode": "grow", "planTarget": 100}
 ```
-Generate 10 food-related cards (category: φαγητό/food).
 
-```
-/taboo 5 παιχνίδια
-```
-Generate 5 game-related cards (theme: παιχνίδια/games).
+- `planTarget` is how many new cards to add. Planning tops up `src/data/taboo-plan.json` until that many targets are pending, then generation writes them.
+- Pace it at about 100 cards (10 batches, ~1M tokens, ~25 min) per run. Check `status` and sample the new cards between runs.
+- If a run stops early, use `{"mode": "generate", "batches": N}` to finish the pending targets without planning more. Skipped targets are never retried.
+- Afterwards, run `node scripts/validate-taboo.mjs deck` and `npm run taboo:prepare`, then commit the deck, plan and extra-words files together.
+
+## Review rubric (for critics and audits)
+
+Judge each card on its own. Verdicts:
+
+- **accept:** it passes everything below.
+- **revise:** the target is good but some forbidden words or the difficulty are off. Return the corrected card.
+- **reject:** the target itself is bad (not a real word, not common, a proper noun, near-duplicate of an existing target, or too vague to describe).
+
+Check, in order:
+
+1. **Target:** a real, common word everyone knows, in dictionary form, not a proper noun, not a near-duplicate.
+2. **Core test:** would a teammate who sees only the 5 forbidden words guess the target quickly?
+3. **Missing obvious clue:** what is the *first* thing you'd say to describe it? If it isn't forbidden, the card is too easy. Swap it in for the weakest word.
+4. **Weak words:** replace any that are loosely related, random, too specific, wrong, redundant or same-root.
+5. **Fairness:** with all 5 blocked, are there still at least two ways to describe it?
+6. **Difficulty and category:** correct label, and a category from the list.
+
+Be strict. Rejecting a card costs nothing, but a bad card ruins a round.

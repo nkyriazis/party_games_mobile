@@ -16,6 +16,7 @@ const TabooCardSchema = {
   target: '', // The main word to be described
   forbidden: [], // Array of 4-5 words that should not be said
   category: '', // The category of the target word
+  difficulty: '', // easy | medium | hard
 };
 
 /**
@@ -24,10 +25,19 @@ const TabooCardSchema = {
  */
 function normalizeCard(card) {
   return {
-    target: card.target,
+    target: toDisplayTarget(card.target),
     forbidden: Array.isArray(card.forbidden) ? card.forbidden : [],
     category: card.category || 'general',
+    difficulty: card.difficulty || 'medium',
   };
+}
+
+/**
+ * Deck targets are stored lowercase with accents ("ψωμί"); the card shows them
+ * in Greek capitals, which drop the tonos ("ΨΩΜΙ").
+ */
+function toDisplayTarget(target) {
+  return target.normalize('NFD').replace(/\u0301/g, '').normalize('NFC').toLocaleUpperCase('el');
 }
 
 /**

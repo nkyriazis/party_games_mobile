@@ -45,6 +45,7 @@ The project is a React-based Progressive Web App (PWA) designed for mobile-first
 - **Data**: 
   - `src/data/grams.json`: Generated list of Greek 2-grams and 3-grams used as prompts.
   - `public/greek_wordlist.txt`: Source wordlist for validation and gram generation.
+  - `src/data/taboo-generated.json`: Taboo deck (source of truth). Change it only through `scripts/validate-taboo.mjs`. Use the `/taboo` skill for a few cards and the `taboo-deck` workflow (`mode: "grow"`) to add many. `src/data/taboo.json` is derived from it at build time.
 - **UI/UX**: 
   - **Styling**: Tailwind CSS with a "Modern Dark" aesthetic (slate/red palette).
   - **Animations**: Framer Motion for screen transitions and bomb pulsing effects.

@@ -4,6 +4,8 @@ import tabooData from '../data/taboo.json';
 export interface TabooCard {
   target: string;
   forbidden: string[];
+  category?: string;
+  difficulty?: string; // easy | medium | hard (typed loosely: it comes from JSON)
 }
 
 export const useTaboo = (

@@ -1,0 +1,17 @@
+# Everyday Greek words missing from public/greek_wordlist.txt (mostly recent loanwords).
+# Add a word only if any adult Greek speaker would use and recognise it. One per line.
+λάπτοπ
+τάμπλετ
+φρέντο
+σέλφι
+ιμέιλ
+σάιτ
+# Holiday names: the wordlist has them only capitalised, cards need them lowercase.
+πάσχα
+χριστούγεννα
+# Interjections in everyday use.
+γείτσες
+# Unit names the wordlist has only capitalised (everyday use: "έξι ρίχτερ").
+ρίχτερ
+# Month names: the wordlist has them only capitalised.
+ιανουάριος

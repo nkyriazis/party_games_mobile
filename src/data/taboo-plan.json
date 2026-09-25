@@ -1,0 +1,2615 @@
+[
+  {
+    "target": "σουβλάκι",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μουσακάς",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "medium"
+  },
+  {
+    "target": "φραπέ",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "τσίπουρο",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ελιά",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κουλούρι",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "τυρόπιτα",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "γιαούρτι",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "καρπούζι",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "γάτα",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "άλογο",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "γάιδαρος",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κατσίκα",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κότα",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "χελώνα",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μέλισσα",
+    "category": "Ζώα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κουνούπι",
+    "category": "Ζώα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "χταπόδι",
+    "category": "Ζώα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "αράχνη",
+    "category": "Ζώα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "δελφίνι",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "γραβάτα",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κάλτσα",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μαγιό",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "γυαλιά",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "medium"
+  },
+  {
+    "target": "νυφικό",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πανηγύρι",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "βάφτιση",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "γάμος",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "λαμπάδα",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κάλαντα",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "βασιλόπιτα",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "γιορτή",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κέρασμα",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "hard"
+  },
+  {
+    "target": "γενέθλια",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μπομπονιέρα",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "δώρο",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "γιαγιά",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "easy"
+  },
+  {
+    "target": "παππούς",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "easy"
+  },
+  {
+    "target": "νονός",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κουμπάρος",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πεθερά",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "medium"
+  },
+  {
+    "target": "γείτονας",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "medium"
+  },
+  {
+    "target": "διαζύγιο",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "hard"
+  },
+  {
+    "target": "γιατρός",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "αστυνομικός",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "πυροσβέστης",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "σερβιτόρος",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "φαρμακοποιός",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "φαντάρος",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "παπάς",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "συνάδελφος",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "hard"
+  },
+  {
+    "target": "δόντι",
+    "category": "Σώμα & υγεία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μαλλιά",
+    "category": "Σώμα & υγεία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "καρδιά",
+    "category": "Σώμα & υγεία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πυρετός",
+    "category": "Σώμα & υγεία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "χάπι",
+    "category": "Σώμα & υγεία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "αντηλιακό",
+    "category": "Σώμα & υγεία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ποδόσφαιρο",
+    "category": "Αθλητισμός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "γήπεδο",
+    "category": "Αθλητισμός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "διαιτητής",
+    "category": "Αθλητισμός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "τάβλι",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "μπουζούκι",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "τραγούδι",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "θέατρο",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "σκάκι",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "λαϊκή",
+    "category": "Μέρη & πόλη",
+    "difficulty": "medium"
+  },
+  {
+    "target": "περίπτερο",
+    "category": "Μέρη & πόλη",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ταβέρνα",
+    "category": "Μέρη & πόλη",
+    "difficulty": "easy"
+  },
+  {
+    "target": "καφετέρια",
+    "category": "Μέρη & πόλη",
+    "difficulty": "easy"
+  },
+  {
+    "target": "φαρμακείο",
+    "category": "Μέρη & πόλη",
+    "difficulty": "easy"
+  },
+  {
+    "target": "εκκλησία",
+    "category": "Μέρη & πόλη",
+    "difficulty": "easy"
+  },
+  {
+    "target": "νοσοκομείο",
+    "category": "Μέρη & πόλη",
+    "difficulty": "easy"
+  },
+  {
+    "target": "καφενείο",
+    "category": "Μέρη & πόλη",
+    "difficulty": "medium"
+  },
+  {
+    "target": "λεωφορείο",
+    "category": "Μεταφορές",
+    "difficulty": "easy"
+  },
+  {
+    "target": "φανάρι",
+    "category": "Μεταφορές",
+    "difficulty": "medium"
+  },
+  {
+    "target": "μποτιλιάρισμα",
+    "category": "Μεταφορές",
+    "difficulty": "hard"
+  },
+  {
+    "target": "τετράδιο",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "easy"
+  },
+  {
+    "target": "διάλειμμα",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "medium"
+  },
+  {
+    "target": "σκονάκι",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "medium"
+  },
+  {
+    "target": "φορτιστής",
+    "category": "Τεχνολογία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "τηλεκοντρόλ",
+    "category": "Τεχνολογία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ψυγείο",
+    "category": "Σπίτι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "σκούπα",
+    "category": "Σπίτι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "τηγάνι",
+    "category": "Σπίτι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κομπολόι",
+    "category": "Αντικείμενα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ξυπνητήρι",
+    "category": "Αντικείμενα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ροχαλίζω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ψήνω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "χορεύω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "σφυρίζω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "χασμουριέμαι",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "φτερνίζομαι",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ψωνίζω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κολυμπάω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κουτσομπολεύω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "γκρινιάζω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "βαριέμαι",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ιδρώνω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "κουρασμένος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "τσιγκούνης",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πεινασμένος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ντροπαλός",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard",
+    "skipped": "near-duplicate of ντροπή (same concept, adjective vs noun)"
+  },
+  {
+    "target": "περήφανος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ζήλια",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "νοσταλγία",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "υπομονή",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "φιλότιμο",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ξενύχτι",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "τύχη",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "εκλογές",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "απεργία",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "φιλοξενία",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ζαλίζομαι",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ψιθυρίζω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "μετακομίζω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "αγχωμένος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ξεχνάω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "τσιμπάω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ντροπή",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "εμπιστοσύνη",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "σεισμός",
+    "category": "Φύση & καιρός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "καύσωνας",
+    "category": "Φύση & καιρός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κλειδί",
+    "category": "Αντικείμενα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ψαλίδι",
+    "category": "Αντικείμενα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "πορτοφόλι",
+    "category": "Αντικείμενα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "βαλίτσα",
+    "category": "Αντικείμενα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "καναπές",
+    "category": "Σπίτι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ντουλάπα",
+    "category": "Σπίτι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "τζάκι",
+    "category": "Σπίτι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "μανταλάκι",
+    "category": "Σπίτι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "σιδερώνω",
+    "category": "Σπίτι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "φέτα",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "παγωτό",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "γεμιστά",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "φασολάδα",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κουραμπιές",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "medium"
+  },
+  {
+    "target": "τσουρέκι",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "medium"
+  },
+  {
+    "target": "λιμάνι",
+    "category": "Μέρη & πόλη",
+    "difficulty": "easy"
+  },
+  {
+    "target": "νησί",
+    "category": "Μέρη & πόλη",
+    "difficulty": "easy"
+  },
+  {
+    "target": "βενζινάδικο",
+    "category": "Μέρη & πόλη",
+    "difficulty": "medium"
+  },
+  {
+    "target": "φυλακή",
+    "category": "Μέρη & πόλη",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ακουστικά",
+    "category": "Τεχνολογία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "πληκτρολόγιο",
+    "category": "Τεχνολογία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κωδικός",
+    "category": "Τεχνολογία",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ίντερνετ",
+    "category": "Τεχνολογία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μήνυμα",
+    "category": "Τεχνολογία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "βιντεοπαιχνίδι",
+    "category": "Τεχνολογία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "δάσκαλος",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μολύβι",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "easy"
+  },
+  {
+    "target": "διαβάζω",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κιμωλία",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "medium"
+  },
+  {
+    "target": "διαγώνισμα",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "medium"
+  },
+  {
+    "target": "φροντιστήριο",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "medium"
+  },
+  {
+    "target": "λεξικό",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ταξί",
+    "category": "Μεταφορές",
+    "difficulty": "easy"
+  },
+  {
+    "target": "τρένο",
+    "category": "Μεταφορές",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μηχανάκι",
+    "category": "Μεταφορές",
+    "difficulty": "easy"
+  },
+  {
+    "target": "προσπερνάω",
+    "category": "Μεταφορές",
+    "difficulty": "hard"
+  },
+  {
+    "target": "κράνος",
+    "category": "Μεταφορές",
+    "difficulty": "easy"
+  },
+  {
+    "target": "δίπλωμα",
+    "category": "Μεταφορές",
+    "difficulty": "medium"
+  },
+  {
+    "target": "παρκάρω",
+    "category": "Μεταφορές",
+    "difficulty": "hard"
+  },
+  {
+    "target": "θυμωμένος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "τεμπέλης",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ερωτευμένος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ξεροκέφαλος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "έκπληξη",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "μοναξιά",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "χορτάτος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "πονηρός",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ελπίδα",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "περιέργεια",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "δικηγόρος",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "υδραυλικός",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ψαράς",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ταχυδρόμος",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μάτι",
+    "category": "Σώμα & υγεία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μύτη",
+    "category": "Σώμα & υγεία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "στομάχι",
+    "category": "Σώμα & υγεία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "αίμα",
+    "category": "Σώμα & υγεία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ένεση",
+    "category": "Σώμα & υγεία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "λόξιγκας",
+    "category": "Σώμα & υγεία",
+    "difficulty": "hard"
+  },
+  {
+    "target": "γκολ",
+    "category": "Αθλητισμός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "τένις",
+    "category": "Αθλητισμός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "γυμναστήριο",
+    "category": "Αθλητισμός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "προπονητής",
+    "category": "Αθλητισμός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "μετάλλιο",
+    "category": "Αθλητισμός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "οπαδός",
+    "category": "Αθλητισμός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πέναλτι",
+    "category": "Αθλητισμός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κιθάρα",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "τράπουλα",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κρυφτό",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "παραμύθι",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ανέκδοτο",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "διακοπές",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "μωρό",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "easy"
+  },
+  {
+    "target": "θείος",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ξάδερφος",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "medium"
+  },
+  {
+    "target": "εγγόνι",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "medium"
+  },
+  {
+    "target": "προίκα",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "hard"
+  },
+  {
+    "target": "κλαίω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "αγκαλιάζω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "χειροκροτώ",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "νυστάζω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "περιμένω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "λιάζομαι",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ξυπνάω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ψαρεύω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "σκαρφαλώνω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "τσακώνομαι",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ξυρίζομαι",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "δανείζομαι",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "αγελάδα",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "γουρούνι",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "φίδι",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κουκουβάγια",
+    "category": "Ζώα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "τζίτζικας",
+    "category": "Ζώα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "παντελόνι",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μπουφάν",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "καπέλο",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "πιτζάμα",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "σαγιονάρα",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "δαχτυλίδι",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ξυπόλυτος",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "hard"
+  },
+  {
+    "target": "σαββατοκύριακο",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μεσημέρι",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ξημέρωμα",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ραντεβού",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "προθεσμία",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ψέμα",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "όνειρο",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "σιωπή",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "καθυστέρηση",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "μυστικό",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "θητεία",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "καρναβάλι",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "επιτάφιος",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "τσουγκρίζω",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "hard"
+  },
+  {
+    "target": "νηστεία",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πρωτοχρονιά",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "γούρι",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "hard"
+  },
+  {
+    "target": "οθόνη",
+    "category": "Τεχνολογία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "εκτυπωτής",
+    "category": "Τεχνολογία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κάμερα",
+    "category": "Τεχνολογία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "τάμπλετ",
+    "category": "Τεχνολογία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ηχείο",
+    "category": "Τεχνολογία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "καλώδιο",
+    "category": "Τεχνολογία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ρομπότ",
+    "category": "Τεχνολογία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "σέλφι",
+    "category": "Τεχνολογία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "βόλεϊ",
+    "category": "Αθλητισμός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "σκι",
+    "category": "Αθλητισμός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μαραθώνιος",
+    "category": "Αθλητισμός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "τερματοφύλακας",
+    "category": "Αθλητισμός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κύπελλο",
+    "category": "Αθλητισμός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "σφυρίχτρα",
+    "category": "Αθλητισμός",
+    "difficulty": "medium",
+    "skipped": "near-duplicate of existing target σφυρίζω: same root, same concept, card would block the same routes (διαιτητής, φυσάω)"
+  },
+  {
+    "target": "τσάντα",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "στολή",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ζώνη",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "φούστα",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "γάντι",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κασκόλ",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "σκουλαρίκι",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κλαρίνο",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ταινία",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "συναυλία",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "τσίρκο",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "σταυρόλεξο",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "βόλτα",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "γόμα",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ξύστρα",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "easy"
+  },
+  {
+    "target": "χάρακας",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κοπάνα",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "hard"
+  },
+  {
+    "target": "βαθμός",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "medium"
+  },
+  {
+    "target": "εκδρομή",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "medium"
+  },
+  {
+    "target": "απουσία",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "hard"
+  },
+  {
+    "target": "τρακτέρ",
+    "category": "Μεταφορές",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ασθενοφόρο",
+    "category": "Μεταφορές",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ελικόπτερο",
+    "category": "Μεταφορές",
+    "difficulty": "easy"
+  },
+  {
+    "target": "πατίνι",
+    "category": "Μεταφορές",
+    "difficulty": "easy"
+  },
+  {
+    "target": "νύφη",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "easy"
+  },
+  {
+    "target": "γαμπρός",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "medium"
+  },
+  {
+    "target": "γονείς",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "easy"
+  },
+  {
+    "target": "δίδυμα",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ανιψιός",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "medium"
+  },
+  {
+    "target": "προξενήτρα",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "hard"
+  },
+  {
+    "target": "αρραβώνας",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "medium"
+  },
+  {
+    "target": "νοσοκόμα",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "αγρότης",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "βοσκός",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ναυαγοσώστης",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "μανάβης",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πιλότος",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "αφεντικό",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "βήχας",
+    "category": "Σώμα & υγεία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "πονοκέφαλος",
+    "category": "Σώμα & υγεία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "γύψος",
+    "category": "Σώμα & υγεία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "γόνατο",
+    "category": "Σώμα & υγεία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "αυτί",
+    "category": "Σώμα & υγεία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "αλλεργία",
+    "category": "Σώμα & υγεία",
+    "difficulty": "hard"
+  },
+  {
+    "target": "πρόβατο",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κόκορας",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "αχινός",
+    "category": "Ζώα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "μέδουσα",
+    "category": "Ζώα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πεταλούδα",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κουφέτα",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κολυμπήθρα",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "χαρταετός",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πυροτεχνήματα",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κόλλυβα",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "hard"
+  },
+  {
+    "target": "τάμα",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "hard"
+  },
+  {
+    "target": "μαξιλάρι",
+    "category": "Σπίτι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κουβέρτα",
+    "category": "Σπίτι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κλιματιστικό",
+    "category": "Σπίτι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πλυντήριο",
+    "category": "Σπίτι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "χιόνι",
+    "category": "Φύση & καιρός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "σύννεφο",
+    "category": "Φύση & καιρός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κεραυνός",
+    "category": "Φύση & καιρός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πιρούνι",
+    "category": "Αντικείμενα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κατσαρόλα",
+    "category": "Αντικείμενα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "θερμόμετρο",
+    "category": "Αντικείμενα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "πλατεία",
+    "category": "Μέρη & πόλη",
+    "difficulty": "easy"
+  },
+  {
+    "target": "αεροδρόμιο",
+    "category": "Μέρη & πόλη",
+    "difficulty": "easy"
+  },
+  {
+    "target": "τζατζίκι",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "λουκουμάδες",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "medium"
+  },
+  {
+    "target": "μαγειρίτσα",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κρασί",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μισθός",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "σύνταξη",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ρουσφέτι",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "φακελάκι",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ενοίκιο",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πουρμπουάρ",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "λογαριασμός",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κέφι",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "μεράκι",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "πλούσιος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "τυφλός",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "αλμυρός",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πικρός",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "έξυπνος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "βρώμικος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ψηλός",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μεθυσμένος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "γενναίος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "πλένω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "απλώνω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ανακατεύω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "αντιγράφω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "υπογράφω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "παραγγέλνω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "βουτάω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "αρμέγω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "σκάβω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "παντρεύομαι",
+    "category": "Ενέργειες",
+    "difficulty": "medium",
+    "skipped": "near-duplicate of existing target γάμος (whose card forbids παντρεύομαι); every route describes the wedding"
+  },
+  {
+    "target": "φιλάω",
+    "category": "Ενέργειες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "χαιρετάω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "φρενάρω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "τηλεφωνώ",
+    "category": "Ενέργειες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "νανουρίζω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "στάση",
+    "category": "Μεταφορές",
+    "difficulty": "medium"
+  },
+  {
+    "target": "βενζίνη",
+    "category": "Μεταφορές",
+    "difficulty": "medium"
+  },
+  {
+    "target": "παστίτσιο",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "medium"
+  },
+  {
+    "target": "μπακλαβάς",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ούζο",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μέλι",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "αυγό",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "παράθυρο",
+    "category": "Σπίτι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κουρτίνα",
+    "category": "Σπίτι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ταράτσα",
+    "category": "Σπίτι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "φούρνος",
+    "category": "Σπίτι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "βρύση",
+    "category": "Σπίτι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "καλοριφέρ",
+    "category": "Σπίτι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "θερμοσίφωνας",
+    "category": "Σπίτι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ρολόι",
+    "category": "Αντικείμενα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "αναπτήρας",
+    "category": "Αντικείμενα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "οδοντόβουρτσα",
+    "category": "Αντικείμενα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μπαλόνι",
+    "category": "Αντικείμενα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "πουκάμισο",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "φόρεμα",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κοστούμι",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "παντόφλα",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "βραχιόλι",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "medium"
+  },
+  {
+    "target": "τακούνι",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "medium"
+  },
+  {
+    "target": "σκούφος",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "medium"
+  },
+  {
+    "target": "χέρι",
+    "category": "Σώμα & υγεία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "νύχι",
+    "category": "Σώμα & υγεία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ρυτίδα",
+    "category": "Σώμα & υγεία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κρυολόγημα",
+    "category": "Σώμα & υγεία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "εγχείρηση",
+    "category": "Σώμα & υγεία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "άρρωστος",
+    "category": "Σώμα & υγεία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ποντίκι",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "σαλιγκάρι",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "περιστέρι",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "αλεπού",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κατσαρίδα",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "παραλία",
+    "category": "Φύση & καιρός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "βροχή",
+    "category": "Φύση & καιρός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κύμα",
+    "category": "Φύση & καιρός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ηλιοβασίλεμα",
+    "category": "Φύση & καιρός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ζαχαροπλαστείο",
+    "category": "Μέρη & πόλη",
+    "difficulty": "medium"
+  },
+  {
+    "target": "χασάπικο",
+    "category": "Μέρη & πόλη",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ξενοδοχείο",
+    "category": "Μέρη & πόλη",
+    "difficulty": "easy"
+  },
+  {
+    "target": "πολυκατοικία",
+    "category": "Μέρη & πόλη",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μπουζούκια",
+    "category": "Μέρη & πόλη",
+    "difficulty": "medium"
+  },
+  {
+    "target": "βάρκα",
+    "category": "Μεταφορές",
+    "difficulty": "easy"
+  },
+  {
+    "target": "εισιτήριο",
+    "category": "Μεταφορές",
+    "difficulty": "easy"
+  },
+  {
+    "target": "τιμόνι",
+    "category": "Μεταφορές",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κόρνα",
+    "category": "Μεταφορές",
+    "difficulty": "medium"
+  },
+  {
+    "target": "διόδια",
+    "category": "Μεταφορές",
+    "difficulty": "hard"
+  },
+  {
+    "target": "οδοντίατρος",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ηλεκτρολόγος",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ηθοποιός",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "καπετάνιος",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "τουρίστας",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κλέφτης",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ζωγράφος",
+    "category": "Επαγγέλματα & άνθρωποι",
+    "difficulty": "medium"
+  },
+  {
+    "target": "μητέρα",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "easy"
+  },
+  {
+    "target": "αδερφός",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κουνιάδος",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "medium"
+  },
+  {
+    "target": "βαφτιστήρι",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κολλητός",
+    "category": "Οικογένεια & σχέσεις",
+    "difficulty": "hard"
+  },
+  {
+    "target": "κασετίνα",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πανελλήνιες",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πτυχίο",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "hard"
+  },
+  {
+    "target": "μαθηματικά",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "easy"
+  },
+  {
+    "target": "φοιτητής",
+    "category": "Σχολείο & γνώση",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πισίνα",
+    "category": "Αθλητισμός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ρακέτα",
+    "category": "Αθλητισμός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πυγμαχία",
+    "category": "Αθλητισμός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "οφσάιντ",
+    "category": "Αθλητισμός",
+    "difficulty": "hard"
+  },
+  {
+    "target": "πρωτάθλημα",
+    "category": "Αθλητισμός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κερκίδα",
+    "category": "Αθλητισμός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "προθέρμανση",
+    "category": "Αθλητισμός",
+    "difficulty": "hard"
+  },
+  {
+    "target": "μικρόφωνο",
+    "category": "Τεχνολογία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "πρίζα",
+    "category": "Τεχνολογία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "λάπτοπ",
+    "category": "Τεχνολογία",
+    "difficulty": "easy"
+  },
+  {
+    "target": "εφαρμογή",
+    "category": "Τεχνολογία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "πιάνο",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "βιολί",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ποίημα",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κούκλα",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "τυφλόμυγα",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "σούβλα",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "στέφανα",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "λαγάνα",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "παρέλαση",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "στολίζω",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ξεμάτιασμα",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "hard"
+  },
+  {
+    "target": "εφορία",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ουρά",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "φασαρία",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "παρέα",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ησυχία",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard",
+    "skipped": "near-duplicate of existing target σιωπή (cards forbid each other, share θόρυβος)"
+  },
+  {
+    "target": "συνήθεια",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "παζαρεύω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "μασάω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "φυσάω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "γλιστράω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "κρυώνω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "αργώ",
+    "category": "Ενέργειες",
+    "difficulty": "hard",
+    "skipped": "near-duplicate of existing target καθυστέρηση (same forbidden words: ραντεβού, ώρα, περιμένω)"
+  },
+  {
+    "target": "ταξιδεύω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "σπρώχνω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "γελάω",
+    "category": "Ενέργειες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "τρέχω",
+    "category": "Ενέργειες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ράβω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ευγενικός",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "φλύαρος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "λαίμαργος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "φαλακρός",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "γλυκός",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κοντός",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ξινός",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "βαρύς",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ζεστός",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "συγκίνηση",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "πανικός",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard",
+    "skipped": "near-duplicate of deck target φόβος, whose card already forbids πανικός; a fair card would have to name φόβος or reuse its forbidden words (τρόμος)"
+  },
+  {
+    "target": "τρακ",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "σταθμός",
+    "category": "Μεταφορές",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ιστοσελίδα",
+    "category": "Τεχνολογία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ασύρματος",
+    "category": "Τεχνολογία",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ζάρι",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ομίχλη",
+    "category": "Φύση & καιρός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "λίμνη",
+    "category": "Φύση & καιρός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "άμμος",
+    "category": "Φύση & καιρός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "δέντρο",
+    "category": "Φύση & καιρός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "λουλούδι",
+    "category": "Φύση & καιρός",
+    "difficulty": "easy"
+  },
+  {
+    "target": "αμπέλι",
+    "category": "Φύση & καιρός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "λιοντάρι",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κουνέλι",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μυρμήγκι",
+    "category": "Ζώα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "καμήλα",
+    "category": "Ζώα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "κερί",
+    "category": "Αντικείμενα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "βελόνα",
+    "category": "Αντικείμενα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "χαρτομάντιλο",
+    "category": "Αντικείμενα",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ξαπλώστρα",
+    "category": "Αντικείμενα",
+    "difficulty": "easy"
+  },
+  {
+    "target": "γέφυρα",
+    "category": "Μέρη & πόλη",
+    "difficulty": "easy"
+  },
+  {
+    "target": "πεζοδρόμιο",
+    "category": "Μέρη & πόλη",
+    "difficulty": "medium"
+  },
+  {
+    "target": "νεκροταφείο",
+    "category": "Μέρη & πόλη",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κομμωτήριο",
+    "category": "Μέρη & πόλη",
+    "difficulty": "medium",
+    "skipped": "near-duplicate of existing κουρέας/κούρεμα cluster; card would reuse μαλλιά, ψαλίδι, κομμωτής and name both existing targets"
+  },
+  {
+    "target": "παζλ",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "μάγος",
+    "category": "Διασκέδαση & τέχνες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "βέρα",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "medium",
+    "skipped": "near-duplicate of existing δαχτυλίδι and αρραβώνας (both already forbid βέρα); card would name δαχτυλίδι and copy γάμος/χρυσός/χέρι"
+  },
+  {
+    "target": "ποδιά",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ζακέτα",
+    "category": "Ρούχα & αξεσουάρ",
+    "difficulty": "easy"
+  },
+  {
+    "target": "μελομακάρονο",
+    "category": "Φαγητό & ποτό",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ακτινογραφία",
+    "category": "Σώμα & υγεία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "κουφός",
+    "category": "Σώμα & υγεία",
+    "difficulty": "medium"
+  },
+  {
+    "target": "δαγκώνω",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "σφουγγαρίζω",
+    "category": "Ενέργειες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "σκοντάφτω",
+    "category": "Ενέργειες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "χτενίζομαι",
+    "category": "Ενέργειες",
+    "difficulty": "medium"
+  },
+  {
+    "target": "ακριβός",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "αστείος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "γρήγορος",
+    "category": "Συναισθήματα & ιδιότητες",
+    "difficulty": "easy"
+  },
+  {
+    "target": "ευχή",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "εκδίκηση",
+    "category": "Χρόνος & έννοιες",
+    "difficulty": "hard"
+  },
+  {
+    "target": "τρύγος",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "hard"
+  },
+  {
+    "target": "γλέντι",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "hard"
+  },
+  {
+    "target": "πρόποση",
+    "category": "Γιορτές & έθιμα",
+    "difficulty": "hard"
+  },
+  {
+    "target": "ισοπαλία",
+    "category": "Αθλητισμός",
+    "difficulty": "hard"
+  },
+  {
+    "target": "γυμναστική",
+    "category": "Αθλητισμός",
+    "difficulty": "medium"
+  },
+  {
+    "target": "φορτηγό",
+    "category": "Μεταφορές",
+    "difficulty": "easy"
+  }
+]
